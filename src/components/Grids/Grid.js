@@ -9,15 +9,18 @@ export default class Grid extends Component {
 
   getAdditionalGridProps() {
     var { isWallGrid, isStartGrid, isEndGrid } = this.props;
-    console.log(isStartGrid);
-    console.log(isEndGrid);
     return isWallGrid ? 'grid-wall' : isStartGrid ? 'grid-start' : isEndGrid? 'grid-end': 'white'
   }
 
   render() {
     return (
-      <td className={`grid ${this.getAdditionalGridProps()}`}>
-        
+      <td
+        className={`grid ${this.getAdditionalGridProps()}`}
+        onMouseDown={() => this.props.onMouseDown(this.props.row, this.props.col)}
+        onMouseUp={() => this.props.onMouseUp(this.props.row, this.props.col)}
+        onMouseEnter={() => this.props.onMouseEnter(this.props.row, this.props.col)}
+        onMouseLeave={() => this.props.onMouseLeave(this.props.row, this.props.col)}
+      >
       </td>
     );
   }
