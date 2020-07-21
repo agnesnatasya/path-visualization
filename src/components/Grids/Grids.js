@@ -3,13 +3,6 @@ import Grid from './Grid';
 
 import './Grids.css';
 
-const ROWS = 25;
-const COLS = 50;
-const START_ROW = 13;
-const START_COL = 15;
-const END_ROW = 13;
-const END_COL = 35;
-
 export default class Grids extends Component {
   constructor(props) {
     super(props);
@@ -43,9 +36,34 @@ export default class Grids extends Component {
   }
 
   initialGrid(row, col) {
-    grid = new Grid();
-    grid.isWallGrid = false;
-    grid.isStartGrid = (row === this.state.startRow) && (col === this.state.startCol);
-    grid.isEndGrid = (row === this.state.endRow) && (col === this.state.endCol);
+    return {
+      isWallGrid: false,
+      isStartGrid: (row === this.state.startRow) && (col === this.state.startCol),
+      isEndGrid: (row === this.state.endRow) && (col === this.state.endCol),
+    };
+  }
+
+  render() {
+    return this.state.grids.map(
+      (row, rowIndex) => {
+        return (
+          <div rowId={rowIndex}>
+            {row.map(
+              (col, colIndex) => {
+                var isWallGrid, isStartGrid, isEndGrid = col;
+                return (
+                  <Grid
+                    key={colIndex}
+                    isWallGrid={isWallGrid}
+                    isStartGrid={isStartGrid}
+                    isEndGrid={isEndGrid}
+                  />
+                );
+              }
+            )
+            }
+          </div>
+        )
+      });
   }
 }
