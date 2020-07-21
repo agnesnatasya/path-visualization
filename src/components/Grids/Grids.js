@@ -36,6 +36,9 @@ export default class Grids extends Component {
   }
 
   initialGrid(row, col) {
+    if ((row === this.state.endRow) && (col === this.state.endCol)) {
+      console.log(true)
+    }
     return {
       isWallGrid: false,
       isStartGrid: (row === this.state.startRow) && (col === this.state.startCol),
@@ -44,26 +47,34 @@ export default class Grids extends Component {
   }
 
   render() {
-    return this.state.grids.map(
-      (row, rowIndex) => {
-        return (
-          <div rowId={rowIndex}>
-            {row.map(
-              (col, colIndex) => {
-                var isWallGrid, isStartGrid, isEndGrid = col;
-                return (
-                  <Grid
-                    key={colIndex}
-                    isWallGrid={isWallGrid}
-                    isStartGrid={isStartGrid}
-                    isEndGrid={isEndGrid}
-                  />
-                );
-              }
-            )
+    return (
+      <table>
+        {
+          this.state.grids.map((row, rowIndex) => {
+              return (
+                <tr key={rowIndex}>
+                  {row.map((col, colIndex) => {
+                    var { isWallGrid, isStartGrid, isEndGrid } = col;
+                    if (isEndGrid) {
+                      console.log("THIS IS END")
+                    }
+                      return (
+                        <Grid
+                          key={colIndex}
+                          isWallGrid={isWallGrid}
+                          isStartGrid={isStartGrid}
+                          isEndGrid={isEndGrid}
+                        />
+                      );
+                    }
+                  )
+                  }
+                </tr>
+              )
             }
-          </div>
-        )
-      });
+          )
+        }
+      </table>
+    )
   }
 }
