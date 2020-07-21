@@ -8,18 +8,17 @@ export default class Grid extends Component {
   }
 
   getAdditionalGridProps() {
-    var additionalGridProperties = '';
-    additionalGridProperties += this.props.isStartGrid ? 'grid-start' : '';
-    additionalGridProperties += this.props.isEndGrid ? 'grid-end' : '';
-    additionalGridProperties += this.props.isWallGrid ? 'grid-wall' : '';
-    return additionalGridProperties
+    var { isWallGrid, isStartGrid, isEndGrid } = this.props;
+    console.log(isStartGrid);
+    console.log(isEndGrid);
+    return isWallGrid ? 'grid-wall' : isStartGrid ? 'grid-start' : isEndGrid? 'grid-end': 'white'
   }
 
   render() {
     return (
-      <div className={`grid ${this.getAdditionalGridProps()}`}>
-        a
-      </div>
+      <td className={`grid ${this.getAdditionalGridProps()}`}>
+        
+      </td>
     );
   }
 }
