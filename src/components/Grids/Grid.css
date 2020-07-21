@@ -1,0 +1,14 @@
+.grid {
+  height: 20px;
+  width: 20px;
+  line-height: 0;  
+  border: 0.5px solid black;
+}
+
+.grid-start {
+  background-color: aquamarine;
+}
+
+.grid-end {
+  background-color: burlywood;
+}
