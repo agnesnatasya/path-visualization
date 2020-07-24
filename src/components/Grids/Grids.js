@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
+import { djikstra } from '../../algorithms/Djikstra.js'
 
 import './Grids.css';
 
@@ -21,6 +22,7 @@ export default class Grids extends Component {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.visualizeDjikstra = this.visualizeDjikstra.bind(this);
   }
 
   componentDidMount() {
@@ -49,9 +51,14 @@ export default class Grids extends Component {
 
   initialGrid(row, col) {
     return {
+      row: row,
+      col: col,
+      visited: false,
       isWallGrid: false,
+      distance: Infinity,
       isStartGrid: this.isStartGrid(row, col),
       isEndGrid: this.isEndGrid(row, col),
+      previousGrid: null,
     };
   }
 
@@ -104,19 +111,6 @@ export default class Grids extends Component {
 
   handleMouseLeave(row, col) {
     if (this.state.buttonDragged) {
-      /*this.setState(prevState => {
-        const newGrids = prevState.grids.slice();
-        const oldGrid = newGrids[row][col];
-        if (this.state.buttonDragged === 'start') {
-          const newGrid = Object.assign({}, oldGrid, { isStartGrid: false });
-          newGrids[row][col] = newGrid;
-          return ({ grids: newGrids });
-        } else {
-          const newGrid = Object.assign({}, oldGrid, { isEndGrid: false });
-          newGrids[row][col] = newGrid;
-          return ({ grids: newGrids });
-        }
-      });*/
       this.toggleStartEndPosition(row, col);
     }
   }
@@ -125,8 +119,24 @@ export default class Grids extends Component {
     this.setState({ mousePressed: false, buttonDragged: null })
   }
 
+  visualizeDjikstra() {
+    var visitedGridsInOrder = djikstra(
+      this.state.grids[this.state.startRow][this.state.startCol],
+      this.state.grids[this.state.endRow][this.state.endCol],
+      this.state.grids
+    )
+    console.log(visitedGridsInOrder)
+    for (let i = 0; i <= visitedGridsInOrder.length - 1; i++) {
+      const node = visitedGridsInOrder[i];
+      document.getElementById(`grid-${node.row}-${node.col}`).className =
+        'grid grid-visited';
+    }
+  }
+
   render() {
     return (
+      <div>
+      <button onClick={this.visualizeDjikstra}>Visualize</button>
       <table>
         {
           this.state.grids.map((row, rowIndex) => {
@@ -156,7 +166,8 @@ export default class Grids extends Component {
             }
           )
         }
-      </table>
+        </table>
+      </div>
     )
   }
 }
