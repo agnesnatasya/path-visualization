@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Grid from './Grid';
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
+import { dfs } from '../../algorithms/DFS.js'
 
 import './Grids.css';
 
@@ -18,7 +19,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "bfs",
+      chosenAlgo: "dfs",
     }
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -143,7 +144,13 @@ export default class Grids extends Component {
           this.state.grids,
         );
       case "bfs":
-        result = await djikstra(
+        result = await bfs(
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids,
+        );
+      case "dfs":
+        result = await dfs(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids,
