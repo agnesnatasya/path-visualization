@@ -15,6 +15,7 @@ export default class Grid extends Component {
   render() {
     return (
       <td
+        id={`grid-${this.props.row}-${ this.props.col }`}
         className={`grid ${this.getAdditionalGridProps()}`}
         onMouseDown={() => this.props.onMouseDown(this.props.row, this.props.col)}
         onMouseUp={() => this.props.onMouseUp(this.props.row, this.props.col)}
