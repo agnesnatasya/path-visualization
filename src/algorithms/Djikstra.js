@@ -1,31 +1,40 @@
 
-export function djikstra(startGrid, endGrid, allGrids) {
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+export async function djikstra(startGrid, endGrid, allGrids, updateVisitedGrid) {
   var visitedNodesInOrder = [];
-  var allNodes = getAllNodes(allGrids);
+  var allNodes = getAllGrids(allGrids);
   startGrid.distance = 0;
-  startGrid.visited = true;
   visitedNodesInOrder.push(startGrid);
   while (allNodes.length !== 0) {
-    console.log("A")
     sortGridsByDistance(allNodes);
     var currentGrid = allNodes.shift();
+    if (currentGrid.isWallGrid) continue;
     if (currentGrid.distance === Infinity) {
-      visitedNodesInOrder.push(endGrid);
-      return visitedNodesInOrder.filter((node) => node !== null);
-    } else if (currentGrid === endGrid) {
-      return visitedNodesInOrder.filter((node) => node !== null);
+      return visitedNodesInOrder;
     }
-    var updatedNeighbors = relaxDistance(currentGrid, allGrids);
-    visitedNodesInOrder.push(...updatedNeighbors);
+    visitedNodesInOrder.push(currentGrid);
+    currentGrid.isVisited = true;
+    await delay(1);
+    updateVisitedGrid(currentGrid);
+    /*document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
+      'grid grid-visited';
+    document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).setInnerHTML =
+      'grid grid-visited';*/
+    relaxDistance(currentGrid, allGrids);
+    if (currentGrid === endGrid) {
+      return visitedNodesInOrder;
+    }
   }
-  return visitedNodesInOrder.filter((node) => node !== null);
+  return visitedNodesInOrder;
 }
 
-function getAllNodes(allGrids) {
+function getAllGrids(allGrids) {
   const grids = [];
   for (const row of allGrids) {
     for (const grid of row) {
-      if (!grid.visited) {
+      if (!grid.isVisited) {
         grids.push(grid);
       }
     }
@@ -44,11 +53,11 @@ function relaxDistance(currentGrid, allGrids) {
 }
 
 function getNeighborsOfGrid(grid, allGrids) {
+  var neighborDown = grid.row < allGrids.length - 1 ? allGrids[grid.row + 1][grid.col]: null;
+  var neighborRight = grid.col < allGrids[0].length - 1 ? allGrids[grid.row][grid.col + 1]: null;
+  var neighborLeft = grid.col > 0 ? allGrids[grid.row][grid.col - 1] : null;
   var neighborTop = grid.row > 0 ? allGrids[grid.row - 1][grid.col] : null;
-  var neighborRight = grid.row < allGrids.length - 1 ? allGrids[grid.row + 1][grid.col]: null;
-  var neighborDown = grid.col < allGrids[0].length - 1 ? allGrids[grid.row][grid.col + 1]: null;
-  var neighborLeft = grid.col > 0 ? allGrids[grid.row][grid.col - 1]: null;
-  return [neighborTop, neighborRight, neighborDown, neighborLeft].filter((neighbor) =>
+  return [neighborRight, neighborDown, neighborLeft, neighborTop].filter((neighbor) =>
     neighbor !== null && (!neighbor.isVisited && !neighbor.isWallGrid)
   );
 }
@@ -57,7 +66,7 @@ function updateNeighborsProperties(neighbors, currentGrid) {
   neighbors.map((neighbor) => {
     if (neighbor !== null) {
       neighbor.distance = currentGrid.distance + 1;
-      neighbor.visited = true;
+      neighbor.isVisited = true;
       neighbor.previousGrid = currentGrid;
     }
   })
