@@ -1,13 +1,11 @@
-
-
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export async function djikstra(startGrid, endGrid, allGrids) {
+  var totalGrids = allGrids.length * allGrids[0].length;
   var visitedNodesInOrder = [];
   var allNodes = getAllGrids(allGrids);
   startGrid.distance = 0;
-  visitedNodesInOrder.push(startGrid);
-  while (allNodes.length !== 0) {
+  while (visitedNodesInOrder.length !== totalGrids) {
     sortGridsByDistance(allNodes);
     var currentGrid = allNodes.shift();
     if (currentGrid.isWallGrid) continue;

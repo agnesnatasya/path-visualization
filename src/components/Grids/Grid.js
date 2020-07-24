@@ -8,11 +8,12 @@ export default class Grid extends Component {
   }
 
   getAdditionalGridProps() {
-    var { isWallGrid, isStartGrid, isEndGrid } = this.props;
+    var { row, col, distance, isVisited, isWallGrid, isStartGrid, isEndGrid, previousGrid } = this.props;
     return isWallGrid ? 'grid-wall' : isStartGrid ? 'grid-start' : isEndGrid? 'grid-end': 'white'
   }
 
   render() {
+    console.log(this.props.distance);
     return (
       <td
         id={`grid-${this.props.row}-${ this.props.col }`}
@@ -22,6 +23,7 @@ export default class Grid extends Component {
         onMouseEnter={() => this.props.onMouseEnter(this.props.row, this.props.col)}
         onMouseLeave={() => this.props.onMouseLeave(this.props.row, this.props.col)}
       >
+        {this.props.distance !== Infinity? this.props.distance : ''}
       </td>
     );
   }
