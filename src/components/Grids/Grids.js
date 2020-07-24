@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
 import { djikstra } from '../../algorithms/Djikstra.js'
+import { bfs } from '../../algorithms/BFS.js'
 
 import './Grids.css';
 
@@ -9,20 +10,21 @@ export default class Grids extends Component {
     super(props);
     this.state = {
       rowSize: 25,
-      colSize: 50,
+      colSize: 25,
       startRow: 12,
-      startCol: 15,
+      startCol: 5,
       endRow: 12,
-      endCol: 35,
+      endCol: 15,
       grids: [],
       mousePressed: false,
       buttonDragged: null,
+      chosenAlgo: "bfs",
     }
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.visualizeDjikstra = this.visualizeDjikstra.bind(this);
+    this.visualizeAlgo = this.visualizeAlgo.bind(this);
     this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
   }
 
@@ -124,33 +126,55 @@ export default class Grids extends Component {
     this.setState(prevState => {
       const newGrids = prevState.grids.slice();
       newGrids[newGrid.row][newGrid.col] = newGrid;
+      console.log(newGrid)
       return {
         grids: newGrids
       }
     })
   }
 
-  visualizeDjikstra() {
-    var visitedGridsInOrder = djikstra(
-      this.state.grids[this.state.startRow][this.state.startCol],
-      this.state.grids[this.state.endRow][this.state.endCol],
-      this.state.grids,
-      this.updateVisitedGrid,
-    )
-    console.log(visitedGridsInOrder)
-    for (let i = 0; i <= visitedGridsInOrder.length - 1; i++) {
-      /*setTimeout(() => {
-        const node = visitedGridsInOrder[i];
-        document.getElementById(`grid-${node.row}-${node.col}`).className =
-          'grid grid-visited';
-      }, 10 * i);*/
+  async visualizeAlgo() {
+    var result;
+    switch (this.state.chosenAlgo) {
+      case "djikstra":
+        result = await djikstra(
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids,
+        );
+      case "bfs":
+        result = await djikstra(
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids,
+        );
+    }
+    var visitedGridsInOrder= result[0];
+    var shortestPath = result[1];
+
+    if (shortestPath) {
+      setTimeout(() => {
+        this.visualizeShortestPath(shortestPath);
+      }, 5 * visitedGridsInOrder.length
+      );
     }
   }
+
+  visualizeShortestPath(nodesInShortestPathOrder) {
+    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+      setTimeout(() => {
+        const node = nodesInShortestPathOrder[i];
+        document.getElementById(`grid-${node.row}-${node.col}`).className =
+          'grid grid-shortest-path';
+      }, 50 * i);
+    }
+  }
+
 
   render() {
     return (
       <div>
-      <button onClick={this.visualizeDjikstra}>Visualize</button>
+      <button onClick={this.visualizeAlgo}>Visualize</button>
       <table>
         {
           this.state.grids.map((gridsRow, rowIndex) => {
@@ -164,6 +188,7 @@ export default class Grids extends Component {
                           row={row}
                           col={col}
                           distance={distance}
+                          isVisited={isVisited}
                           isWallGrid={isWallGrid}
                           isStartGrid={isStartGrid}
                           isEndGrid={isEndGrid}
