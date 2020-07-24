@@ -16,3 +16,7 @@
 .grid-wall {
   background-color: red;
 }
+
+.grid-visited {
+  background-color: green;
+}
