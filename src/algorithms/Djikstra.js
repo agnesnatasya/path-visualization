@@ -2,7 +2,7 @@
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-export async function djikstra(startGrid, endGrid, allGrids, updateVisitedGrid) {
+export async function djikstra(startGrid, endGrid, allGrids) {
   var visitedNodesInOrder = [];
   var allNodes = getAllGrids(allGrids);
   startGrid.distance = 0;
@@ -12,22 +12,19 @@ export async function djikstra(startGrid, endGrid, allGrids, updateVisitedGrid) 
     var currentGrid = allNodes.shift();
     if (currentGrid.isWallGrid) continue;
     if (currentGrid.distance === Infinity) {
-      return visitedNodesInOrder;
+      return [visitedNodesInOrder, getShortestPath(endGrid)];
     }
     visitedNodesInOrder.push(currentGrid);
     currentGrid.isVisited = true;
-    await delay(1);
-    updateVisitedGrid(currentGrid);
-    /*document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
+    await delay(5);
+    document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
       'grid grid-visited';
-    document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).setInnerHTML =
-      'grid grid-visited';*/
     relaxDistance(currentGrid, allGrids);
     if (currentGrid === endGrid) {
-      return visitedNodesInOrder;
+      return [visitedNodesInOrder, getShortestPath(endGrid)];
     }
   }
-  return visitedNodesInOrder;
+  return visitedNodesInOrder, getShortestPath(endGrid);
 }
 
 function getAllGrids(allGrids) {
@@ -40,6 +37,16 @@ function getAllGrids(allGrids) {
     }
   }
   return grids;
+}
+
+function getShortestPath(endGrid) {
+  var shortestPath = [];
+  var currentGrid = endGrid;
+  while (currentGrid) {
+    shortestPath.unshift(currentGrid);
+    currentGrid = currentGrid.previousGrid;
+  }
+  return shortestPath;
 }
 
 function sortGridsByDistance(allNodes) {
@@ -65,7 +72,11 @@ function getNeighborsOfGrid(grid, allGrids) {
 function updateNeighborsProperties(neighbors, currentGrid) {
   neighbors.map((neighbor) => {
     if (neighbor !== null) {
-      neighbor.distance = currentGrid.distance + 1;
+      neighbor.distance =
+        (neighbor.distance > currentGrid.distance + 1) ?
+          currentGrid.distance + 1
+          :
+          neighbor.distance;
       neighbor.isVisited = true;
       neighbor.previousGrid = currentGrid;
     }
