@@ -23,6 +23,7 @@ export default class Grids extends Component {
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.visualizeDjikstra = this.visualizeDjikstra.bind(this);
+    this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
   }
 
   componentDidMount() {
@@ -53,9 +54,9 @@ export default class Grids extends Component {
     return {
       row: row,
       col: col,
-      visited: false,
-      isWallGrid: false,
       distance: Infinity,
+      isVisited: false,
+      isWallGrid: false,
       isStartGrid: this.isStartGrid(row, col),
       isEndGrid: this.isEndGrid(row, col),
       previousGrid: null,
@@ -119,17 +120,30 @@ export default class Grids extends Component {
     this.setState({ mousePressed: false, buttonDragged: null })
   }
 
+  updateVisitedGrid(newGrid) {
+    this.setState(prevState => {
+      const newGrids = prevState.grids.slice();
+      newGrids[newGrid.row][newGrid.col] = newGrid;
+      return {
+        grids: newGrids
+      }
+    })
+  }
+
   visualizeDjikstra() {
     var visitedGridsInOrder = djikstra(
       this.state.grids[this.state.startRow][this.state.startCol],
       this.state.grids[this.state.endRow][this.state.endCol],
-      this.state.grids
+      this.state.grids,
+      this.updateVisitedGrid,
     )
     console.log(visitedGridsInOrder)
     for (let i = 0; i <= visitedGridsInOrder.length - 1; i++) {
-      const node = visitedGridsInOrder[i];
-      document.getElementById(`grid-${node.row}-${node.col}`).className =
-        'grid grid-visited';
+      /*setTimeout(() => {
+        const node = visitedGridsInOrder[i];
+        document.getElementById(`grid-${node.row}-${node.col}`).className =
+          'grid grid-visited';
+      }, 10 * i);*/
     }
   }
 
@@ -139,23 +153,25 @@ export default class Grids extends Component {
       <button onClick={this.visualizeDjikstra}>Visualize</button>
       <table>
         {
-          this.state.grids.map((row, rowIndex) => {
+          this.state.grids.map((gridsRow, rowIndex) => {
               return (
                 <tr key={rowIndex}>
-                  {row.map((col, colIndex) => {
-                    var { isWallGrid, isStartGrid, isEndGrid } = col;
+                  {gridsRow.map((gridsCol, colIndex) => {
+                    var { row, col, distance, isVisited, isWallGrid, isStartGrid, isEndGrid, previousGrid} = gridsCol;
                       return (
                         <Grid
-                          key={colIndex}
-                          row={rowIndex}
-                          col={colIndex}
+                          key={col}
+                          row={row}
+                          col={col}
+                          distance={distance}
+                          isWallGrid={isWallGrid}
+                          isStartGrid={isStartGrid}
+                          isEndGrid={isEndGrid}
+                          previousGrid={previousGrid}
                           onMouseDown={this.handleMouseDown}
                           onMouseUp={this.handleMouseUp}
                           onMouseEnter={this.handleMouseEnter}
                           onMouseLeave={this.handleMouseLeave}
-                          isWallGrid={isWallGrid}
-                          isStartGrid={isStartGrid}
-                          isEndGrid={isEndGrid}
                         />
                       );
                     }
