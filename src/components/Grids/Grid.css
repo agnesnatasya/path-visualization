@@ -1,20 +1,26 @@
+
+
 .grid {
-  height: 20px;
-  width: 20px;
+  height: 25px;
+  width: 25px;
   line-height: 0;  
-  border: 0.5px solid black;
+  border: 0.5px solid #bf9b6d;
+}
+
+.header-bar {
+  border-bottom: 0.1px solid #bf9b6d;
 }
 
 .grid-start {
-  background-color: aquamarine;
+  background-color: #f58b54;
 }
 
 .grid-end {
-  background-color: burlywood;
+  background-color: #fdba9a;
 }
 
 .grid-wall {
-  background-color: red;
+  background-color: #42240C;
 }
 
 .grid-visited {
@@ -28,25 +34,34 @@
   animation-play-state: running;
 }
 
+.btn {
+  color: rgba(0,0,0,.5) !important;
+  border-color: #bf9b6d !important;
+}
+
+.btn:hover {
+  background-color: white !important;
+}
+
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
-    background-color: rgba(0, 0, 66, 0.75);
+    background-color: #ffdecf;
     border-radius: 100%;
   }
 
   50% {
-    background-color: rgba(17, 104, 217, 0.75);
+    background-color: #f9c49a;
   }
 
   75% {
     transform: scale(1.2);
-    background-color: rgba(0, 217, 159, 0.75);
+    background-color: #f69e7b;
   }
 
   100% {
     transform: scale(1);
-    background-color: rgba(0, 190, 218, 0.75);
+    background-color: #ba7967;
   }
 }
 
