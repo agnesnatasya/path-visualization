@@ -3,6 +3,7 @@ import Grid from './Grid';
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
 import { dfs } from '../../algorithms/DFS.js'
+import { Navbar, Nav, NavDropdown, Button, Form } from 'react-bootstrap'
 
 import './Grids.css';
 
@@ -19,7 +20,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "dfs",
+      chosenAlgo: "bfs",
     }
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -43,6 +44,27 @@ export default class Grids extends Component {
       initialGrids.push(currentRow);
     }
     return initialGrids;
+  }
+
+  headerBar = () => {
+    return (
+      <Navbar bg="light" expand="lg">
+        <Navbar.Brand href="#home">Path Visualization</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <NavDropdown title="Algorithm" id="basic-nav-dropdown">
+              <NavDropdown.Item>Djikstra</NavDropdown.Item>
+              <NavDropdown.Item>BFS</NavDropdown.Item>
+              <NavDropdown.Item>DFS</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+        <Form inline>
+          <Button variant="outline-primary" onClick={this.visualizeAlgo}>Visualize</Button>
+        </Form>
+      </Navbar >
+    )
   }
 
   isStartGrid(row, col) {
@@ -181,7 +203,7 @@ export default class Grids extends Component {
   render() {
     return (
       <div>
-      <button onClick={this.visualizeAlgo}>Visualize</button>
+        {this.headerBar()}
       <table>
         {
           this.state.grids.map((gridsRow, rowIndex) => {

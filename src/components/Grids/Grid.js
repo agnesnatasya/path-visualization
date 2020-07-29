@@ -23,7 +23,6 @@ export default class Grid extends Component {
         onMouseEnter={() => this.props.onMouseEnter(this.props.row, this.props.col)}
         onMouseLeave={() => this.props.onMouseLeave(this.props.row, this.props.col)}
       >
-        {this.props.distance !== Infinity? this.props.distance : ''}
       </td>
     );
   }
