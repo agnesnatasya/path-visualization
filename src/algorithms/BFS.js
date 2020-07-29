@@ -1,6 +1,6 @@
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-export async function djikstra(startGrid, endGrid, allGrids) {
+export async function bfs(startGrid, endGrid, allGrids) {
   var visitedNodesInOrder = [];
   var queue = [startGrid];
   startGrid.distance = 0;

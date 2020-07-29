@@ -8,7 +8,6 @@ export async function dfs(currentGrid, endGrid, allGrids) {
     'grid grid-visited';
   updateNeighborsAndQueue(currentGrid, endGrid, allGrids);
   if (currentGrid === endGrid) {
-    console.log("A")
     return [visitedNodesInOrder, getShortestPath(endGrid)];
   }
   return visitedNodesInOrder, getShortestPath(endGrid);
