@@ -1,6 +1,6 @@
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-export async function bfs(startGrid, endGrid, allGrids) {
+export function bfs(startGrid, endGrid, allGrids) {
   var visitedNodesInOrder = [];
   var queue = [startGrid];
   startGrid.distance = 0;
@@ -9,15 +9,12 @@ export async function bfs(startGrid, endGrid, allGrids) {
     if (currentGrid.isWallGrid) continue;
     visitedNodesInOrder.push(currentGrid);
     currentGrid.isVisited = true;
-    await delay(5);
-    document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
-      'grid grid-visited';
     updateNeighborsAndQueue(currentGrid, allGrids, queue);
     if (currentGrid === endGrid) {
       return [visitedNodesInOrder, getShortestPath(endGrid)];
     }
   }
-  return visitedNodesInOrder, getShortestPath(endGrid);
+  return [visitedNodesInOrder, getShortestPath(endGrid)];
 }
 
 function getShortestPath(endGrid) {

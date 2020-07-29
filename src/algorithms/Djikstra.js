@@ -1,6 +1,4 @@
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
-export async function djikstra(startGrid, endGrid, allGrids) {
+export function djikstra(startGrid, endGrid, allGrids) {
   var totalGrids = allGrids.length * allGrids[0].length;
   var visitedNodesInOrder = [];
   var allNodes = getAllGrids(allGrids);
@@ -10,19 +8,19 @@ export async function djikstra(startGrid, endGrid, allGrids) {
     var currentGrid = allNodes.shift();
     if (currentGrid.isWallGrid) continue;
     if (currentGrid.distance === Infinity) {
+      console.log("AAAA")
+      console.log([visitedNodesInOrder, getShortestPath(endGrid)]);
       return [visitedNodesInOrder, getShortestPath(endGrid)];
     }
     visitedNodesInOrder.push(currentGrid);
     currentGrid.isVisited = true;
-    await delay(5);
-    document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
-      'grid grid-visited';
+    
     relaxDistance(currentGrid, allGrids);
     if (currentGrid === endGrid) {
       return [visitedNodesInOrder, getShortestPath(endGrid)];
     }
   }
-  return visitedNodesInOrder, getShortestPath(endGrid);
+  return [visitedNodesInOrder, getShortestPath(endGrid)];
 }
 
 function getAllGrids(allGrids) {

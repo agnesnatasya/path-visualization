@@ -1,7 +1,7 @@
 //const delay = ms => new Promise(res => setTimeout(res, ms));
 var visitedNodesInOrder = [];
 
-export async function dfs(currentGrid, endGrid, allGrids) {
+export function dfs(currentGrid, endGrid, allGrids) {
   visitedNodesInOrder.push(currentGrid);
   currentGrid.isVisited = true;
   document.getElementById(`grid-${currentGrid.row}-${currentGrid.col}`).className =
@@ -10,7 +10,7 @@ export async function dfs(currentGrid, endGrid, allGrids) {
   if (currentGrid === endGrid) {
     return [visitedNodesInOrder, getShortestPath(endGrid)];
   }
-  return visitedNodesInOrder, getShortestPath(endGrid);
+  return [visitedNodesInOrder, getShortestPath(endGrid)];
 }
 
 function getShortestPath(endGrid) {
