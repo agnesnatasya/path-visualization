@@ -13,7 +13,6 @@ export default class Grid extends Component {
   }
 
   render() {
-    console.log(this.props.distance);
     return (
       <td
         id={`grid-${this.props.row}-${ this.props.col }`}

@@ -16,12 +16,12 @@ export default class Grids extends Component {
       startRow: 12,
       startCol: 5,
       endRow: 12,
-      endCol: 15,
+      endCol: 19,
       grids: [],
       mousePressed: false,
       buttonDragged: null,
       chosenAlgo: "bfs",
-    }
+    };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -48,7 +48,7 @@ export default class Grids extends Component {
 
   headerBar = () => {
     return (
-      <Navbar bg="light" expand="lg">
+      <Navbar className='header-bar' expand="lg">
         <Navbar.Brand href="#home">Path Visualization</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -157,36 +157,48 @@ export default class Grids extends Component {
   }
 
   async visualizeAlgo() {
-    var result;
+    var visitedGridsInOrder, shortestPath;
     switch (this.state.chosenAlgo) {
       case "djikstra":
-        result = await djikstra(
+        [visitedGridsInOrder, shortestPath] = djikstra(
+            this.state.grids[this.state.startRow][this.state.startCol],
+            this.state.grids[this.state.endRow][this.state.endCol],
+            this.state.grids
+          );
+        [visitedGridsInOrder, shortestPath] = djikstra(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids,
+          this.state.grids
         );
       case "bfs":
-        result = await bfs(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids,
-        );
+        [visitedGridsInOrder, shortestPath] = bfs(
+            this.state.grids[this.state.startRow][this.state.startCol],
+            this.state.grids[this.state.endRow][this.state.endCol],
+            this.state.grids
+          );
       case "dfs":
-        result = await dfs(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids,
-        );
+        [visitedGridsInOrder, shortestPath] = dfs(
+            this.state.grids[this.state.startRow][this.state.startCol],
+            this.state.grids[this.state.endRow][this.state.endCol],
+            this.state.grids
+          );
     }
-    var visitedGridsInOrder= result[0];
-    var shortestPath = result[1];
-
+    console.log("ASAA")
+    console.log(visitedGridsInOrder)
+    visitedGridsInOrder.map((item, index) => {
+      console.log(item)
+      setTimeout(() => {
+        document.getElementById(`grid-${item.row}-${item.col}`).className =
+          'grid grid-visited';
+      }, 5 * index);
+    });
     if (shortestPath) {
       setTimeout(() => {
         this.visualizeShortestPath(shortestPath);
-      }, 5 * visitedGridsInOrder.length
+      }, 10 * visitedGridsInOrder.length
       );
     }
+
   }
 
   visualizeShortestPath(nodesInShortestPathOrder) {
