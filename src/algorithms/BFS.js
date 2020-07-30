@@ -1,20 +1,19 @@
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export function bfs(startGrid, endGrid, allGrids) {
-  var visitedNodesInOrder = [];
+  var visitedGridsInOrder = [];
   var queue = [startGrid];
   startGrid.distance = 0;
   while (queue.length !== 0) {
     var currentGrid = queue.shift();
     if (currentGrid.isWallGrid) continue;
-    visitedNodesInOrder.push(currentGrid);
+    visitedGridsInOrder.push(currentGrid);
     currentGrid.isVisited = true;
     updateNeighborsAndQueue(currentGrid, allGrids, queue);
     if (currentGrid === endGrid) {
-      return [visitedNodesInOrder, getShortestPath(endGrid)];
+      return [visitedGridsInOrder, getShortestPath(endGrid)];
     }
   }
-  return [visitedNodesInOrder, getShortestPath(endGrid)];
+  return [visitedGridsInOrder, getShortestPath(endGrid)];
 }
 
 function getShortestPath(endGrid) {
@@ -38,7 +37,7 @@ function getNeighborsOfGrid(grid, allGrids) {
   var neighborRight = grid.col < allGrids[0].length - 1 ? allGrids[grid.row][grid.col + 1] : null;
   var neighborLeft = grid.col > 0 ? allGrids[grid.row][grid.col - 1] : null;
   var neighborTop = grid.row > 0 ? allGrids[grid.row - 1][grid.col] : null;
-  return [neighborRight, neighborDown, neighborLeft, neighborTop].filter((neighbor) =>
+  return [neighborTop, neighborRight, neighborDown, neighborLeft].filter((neighbor) =>
     neighbor !== null && (!neighbor.isVisited && !neighbor.isWallGrid)
   );
 }
