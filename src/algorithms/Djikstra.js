@@ -1,26 +1,29 @@
 export function djikstra(startGrid, endGrid, allGrids) {
   var totalGrids = allGrids.length * allGrids[0].length;
-  var visitedNodesInOrder = [];
+  var visitedGridsInOrder = [];
   var allNodes = getAllGrids(allGrids);
   startGrid.distance = 0;
-  while (visitedNodesInOrder.length !== totalGrids) {
+  while (visitedGridsInOrder.length !== totalGrids) {
     sortGridsByDistance(allNodes);
     var currentGrid = allNodes.shift();
     if (currentGrid.isWallGrid) continue;
     if (currentGrid.distance === Infinity) {
-      console.log("AAAA")
-      console.log([visitedNodesInOrder, getShortestPath(endGrid)]);
-      return [visitedNodesInOrder, getShortestPath(endGrid)];
+      var shortestPath = [];
+      return [visitedGridsInOrder, shortestPath];
     }
-    visitedNodesInOrder.push(currentGrid);
+    visitedGridsInOrder.push(currentGrid);
+    console.log(visitedGridsInOrder);
     currentGrid.isVisited = true;
     
     relaxDistance(currentGrid, allGrids);
     if (currentGrid === endGrid) {
-      return [visitedNodesInOrder, getShortestPath(endGrid)];
+      var shortestPath = getShortestPath(endGrid);
+      console.log([visitedGridsInOrder, shortestPath])
+      return [visitedGridsInOrder, shortestPath];
     }
   }
-  return [visitedNodesInOrder, getShortestPath(endGrid)];
+  var shortestPath = [];
+  return [visitedGridsInOrder, shortestPath];
 }
 
 function getAllGrids(allGrids) {
@@ -60,7 +63,7 @@ function getNeighborsOfGrid(grid, allGrids) {
   var neighborRight = grid.col < allGrids[0].length - 1 ? allGrids[grid.row][grid.col + 1]: null;
   var neighborLeft = grid.col > 0 ? allGrids[grid.row][grid.col - 1] : null;
   var neighborTop = grid.row > 0 ? allGrids[grid.row - 1][grid.col] : null;
-  return [neighborRight, neighborDown, neighborLeft, neighborTop].filter((neighbor) =>
+  return [neighborTop, neighborRight, neighborDown, neighborLeft].filter((neighbor) =>
     neighbor !== null && (!neighbor.isVisited && !neighbor.isWallGrid)
   );
 }
