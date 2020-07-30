@@ -12,13 +12,11 @@ export function djikstra(startGrid, endGrid, allGrids) {
       return [visitedGridsInOrder, shortestPath];
     }
     visitedGridsInOrder.push(currentGrid);
-    console.log(visitedGridsInOrder);
     currentGrid.isVisited = true;
     
     relaxDistance(currentGrid, allGrids);
     if (currentGrid === endGrid) {
       var shortestPath = getShortestPath(endGrid);
-      console.log([visitedGridsInOrder, shortestPath])
       return [visitedGridsInOrder, shortestPath];
     }
   }
