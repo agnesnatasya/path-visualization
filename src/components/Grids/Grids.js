@@ -20,7 +20,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "bfs",
+      chosenAlgo: "astar",
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -31,6 +31,7 @@ export default class Grids extends Component {
   }
 
   componentDidMount() {
+    console.log(this.setInitialGrids());
     this.setState({ grids: this.setInitialGrids() });
   }
 
@@ -156,48 +157,45 @@ export default class Grids extends Component {
     })
   }
 
-  async visualizeAlgo() {
-    var visitedGridsInOrder, shortestPath;
+  visualizeAlgo() {
+    let [visitedGridsInOrder, shortestPath] = [null, null];
     switch (this.state.chosenAlgo) {
       case "djikstra":
-        [visitedGridsInOrder, shortestPath] = djikstra(
-            this.state.grids[this.state.startRow][this.state.startCol],
-            this.state.grids[this.state.endRow][this.state.endCol],
-            this.state.grids
-          );
         [visitedGridsInOrder, shortestPath] = djikstra(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
+        break;
       case "bfs":
         [visitedGridsInOrder, shortestPath] = bfs(
-            this.state.grids[this.state.startRow][this.state.startCol],
-            this.state.grids[this.state.endRow][this.state.endCol],
-            this.state.grids
-          );
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids
+        );
+        break;
       case "dfs":
         [visitedGridsInOrder, shortestPath] = dfs(
-            this.state.grids[this.state.startRow][this.state.startCol],
-            this.state.grids[this.state.endRow][this.state.endCol],
-            this.state.grids
-          );
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids
+        );
+        break;
+      
     }
-    console.log("ASAA")
-    console.log(visitedGridsInOrder)
     visitedGridsInOrder.map((item, index) => {
-      console.log(item)
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           'grid grid-visited';
-      }, 5 * index);
+      }, 3000 * index);
     });
     if (shortestPath) {
       setTimeout(() => {
         this.visualizeShortestPath(shortestPath);
-      }, 10 * visitedGridsInOrder.length
+      }, 3000 * visitedGridsInOrder.length
       );
     }
+
 
   }
 
