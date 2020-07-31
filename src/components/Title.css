@@ -1,0 +1,14 @@
+.header-bar {
+  text-align: center;
+  justify-content: center;
+}
+
+.navbar-brand {
+  font-family: Muli;
+  font-size: 18px !important;
+  letter-spacing: .2em;
+  font-weight: 400;
+  padding-top: 5%;
+  text-transform: uppercase;
+  margin: auto;
+}
