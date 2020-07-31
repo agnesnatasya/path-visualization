@@ -5,9 +5,16 @@ import { greedyBestFirst } from '../../algorithms/GreedyBestFirst.js'
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
 import { dfs } from '../../algorithms/DFS.js'
-import { Navbar, Row, Col, Button, Badge, Container } from 'react-bootstrap'
+import { Row, Col, Button, Badge, Container } from 'react-bootstrap'
 
 import './Grids.css';
+
+const algoChoices = [
+  "A* Search",
+  "BFS",
+  "Djikstra's Algorithm",
+  "Greedy Best First Search",
+]
 
 export default class Grids extends Component {
   constructor(props) {
@@ -30,13 +37,6 @@ export default class Grids extends Component {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.visualizeAlgo = this.visualizeAlgo.bind(this);
-    this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
-    this.toggleButtonsEnabled = this.toggleButtonsEnabled.bind(this);
-    this.toggleStartEndPosition = this.toggleStartEndPosition.bind(this);
-    this.toggleWallGrid = this.toggleWallGrid.bind(this);
-    this.checkIfStartOrEnd = this.checkIfStartOrEnd.bind(this);
-    this.visualizeShortestPath = this.visualizeShortestPath.bind(this);
   }
 
   componentDidMount() {
@@ -70,60 +70,26 @@ export default class Grids extends Component {
   header = () => {
     return (
       <Container>
-        <Badge className="startGridBadge">
-          Drag the yellow grid to set start position
-        </Badge>
-        <Badge className="endGridBadge">
-          Drag the orange grid to set end position
-        </Badge>
-        <Badge className="wallGridBadge">
-          Drag over the board to draw wall grids
-        </Badge>
-        <br />
         <Row>
-          <Col>
-            <label htmlFor="module-credit">Algorithm</label>
-            <select
-              id="module-credit"
-              className="form-control"
-              value={this.state.moduleCredit}
-              onChange={(e) => this.setState({ algo: e.target.value })}
-            >
-              {[
-                "A* Search",
-                "BFS",
-                "Djikstra's Algorithm",
-                "Greedy Best First Search",
-              ].map((item) => (
-                <option key={item} value={item} className="selectItems">
-                  {item}
-                </option>
-              ))}
-            </select>
-          </Col>
+          <label htmlFor="module-credit">Algorithm</label>
+          <select
+            className="form-control"
+            value={this.state.algo}
+            onChange={(e) => this.setState({ algo: e.target.value })}
+          >
+            {algoChoices.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
         </Row>
         <Row>
-
-          <Col>
-            <Button
-              variant="outline-primary"
-              onClick={this.visualizeAlgo}
-              disabled={!this.state.buttonsEnabled}
-            >
-              Visualize
-            </Button>
-          </Col>
+          <Button onClick={this.visualizeAlgo} disabled={!this.state.buttonsEnabled}>
+          Visualize!
+          </Button>
         </Row>
       </Container>
-    );
-  }
-
-
-  headerBar = () => {
-    return (
-      <Navbar className="header-bar" expand="lg">
-        <Navbar.Brand href="#home">Path Visualization</Navbar.Brand>
-      </Navbar>
     );
   }
 
@@ -265,7 +231,7 @@ export default class Grids extends Component {
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           "grid grid-visited";
-        this.checkIfStartOrEnd(item);
+        this.checkIfStartOrEndGrid(item);
       }, 20 * index);
     });
 
@@ -274,7 +240,7 @@ export default class Grids extends Component {
     }, 20 * visitedGridsInOrder.length + 20 * shortestPathGrids.length + 50);
   }
 
-  checkIfStartOrEnd(item) {
+  checkIfStartOrEndGrid(item) {
     if (this.isStartGrid(item.row, item.col)) {
       document.getElementById(`grid-${item.row}-${item.col}`).className =
         "grid grid-start";
@@ -289,16 +255,14 @@ export default class Grids extends Component {
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           "grid grid-shortest-path";
-        this.checkIfStartOrEnd(item);
+        this.checkIfStartOrEndGrid(item);
       }, 20 * index);
     });
   }
 
-
   render() {
     return (
       <div>
-        {this.headerBar()}
         {this.header()}
       <table>
         {

@@ -6,20 +6,20 @@ table {
   margin-bottom: 3%;
 }
 
-.startGridBadge {
-  background-color: yellow;
-  margin: 1rem;
+.btn {
+  color: rgba(0,0,0,.5) !important;
+  border-color: #bf9b6d !important;
+  margin-top: 1rem;
+  color: black !important;
 }
 
-.endGridBadge {
-  background-color: #df672c;
-  margin: 1rem;
+.btn:hover {
+  background-color: #f2e0cb !important;
 }
 
-.wallGridBadge {
-  background-color: #42240C;
-  color: white;
-  margin: 1rem;
+button:disabled,
+button[disabled]{
+  cursor:not-allowed !important;
 }
 
 label {
