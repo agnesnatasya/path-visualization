@@ -6,11 +6,17 @@ export function astar(startGrid, endGrid, allGrids) {
   openList.push(startGrid);
 
   while (openList.length > 0) {
-    let lowestF = 0;
+    let lowestFOrH = 0;
     for (let i = 0; i < openList.length; i++) {
-      if (openList[i].fValue < openList[lowestF].fValue) { lowestF = i; }
+      if (openList[i].fValue < openList[lowestFOrH].fValue) {
+        lowestFOrH = i;
+      } else if (openList[i].fValue = openList[lowestFOrH].fValue) {
+        if (openList[i].hValue < openList[lowestFOrH].hValue) {
+          lowestFOrH = i;
+        }
+      }
     }
-    let currentGrid = openList[lowestF];
+    let currentGrid = openList[lowestFOrH];
 
     visitedGridsInOrder.push(currentGrid);
     if (currentGrid.row === endGrid.row && currentGrid.col === endGrid.col) {
