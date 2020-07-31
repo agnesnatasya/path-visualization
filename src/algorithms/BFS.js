@@ -1,5 +1,37 @@
+function initializeGrids(allGrids) {
+  let initialGrids = [];
+  let startGrid = null;
+  let endGrid = null;
+  for (let row = 0; row < allGrids.length; row++) {
+    let currentRow = [];
+    for (let col = 0; col < allGrids[0].length; col++) {
+      const originalGrid = allGrids[row][col];
+      const modifiedGrid = initialGrid(originalGrid);
+      currentRow.push(modifiedGrid);
+      if (originalGrid.isStartGrid) startGrid = modifiedGrid;
+      if (originalGrid.isEndGrid) endGrid = modifiedGrid;
+    }
+    initialGrids.push(currentRow);
+  }
+  return [startGrid, endGrid, initialGrids];
+}
 
-export function bfs(startGrid, endGrid, allGrids) {
+function initialGrid(originalGrid) {
+  var { row, col, isVisited, isWallGrid, previousGrid } = originalGrid;
+  return {
+    row: row,
+    col: col,
+    isVisited: isVisited,
+    isWallGrid: isWallGrid,
+    previousGrid: previousGrid,
+  };
+}
+
+export function bfs(allGrids) {
+  return bfsImplementation(...initializeGrids(allGrids));
+}
+
+function bfsImplementation(startGrid, endGrid, allGrids) {
   var visitedGridsInOrder = [];
   var queue = [startGrid];
   startGrid.distance = 0;
