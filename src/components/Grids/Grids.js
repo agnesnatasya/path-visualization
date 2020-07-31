@@ -22,7 +22,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "bfs",
+      chosenAlgo: "astar",
       buttonsEnabled: true,
       pureGrid: true,
     };
@@ -41,6 +41,19 @@ export default class Grids extends Component {
 
   componentDidMount() {
     this.setState({ grids: this.setInitialGrids() });
+  }
+
+  initialGrid(row, col) {
+    return {
+      row: row,
+      col: col,
+      distance: Infinity,
+      isVisited: false,
+      isWallGrid: false,
+      isStartGrid: this.isStartGrid(row, col),
+      isEndGrid: this.isEndGrid(row, col),
+      previousGrid: null,
+    };
   }
 
   setInitialGrids() {
@@ -86,19 +99,6 @@ export default class Grids extends Component {
 
   isEndGrid(row, col) {
     return (row === this.state.endRow) && (col === this.state.endCol)
-  }
-
-  initialGrid(row, col) {
-    return {
-      row: row,
-      col: col,
-      distance: Infinity,
-      isVisited: false,
-      isWallGrid: false,
-      isStartGrid: this.isStartGrid(row, col),
-      isEndGrid: this.isEndGrid(row, col),
-      previousGrid: null,
-    };
   }
 
   toggleWallGrid(row, col) {
@@ -204,33 +204,21 @@ export default class Grids extends Component {
     this.setState({pureGrid: false})
     this.toggleButtonsEnabled();
 
-    const gridsInfo = {
-      rowSize: this.state.rowSize,
-      colSize: this.state.colSize,
-      startRow: this.state.startRow,
-      startCol: this.state.startCol,
-      endRow: this.state.endRow,
-      endCol: this.state.endCol,
-    };
-    const algoArguments = [
-      this.state.grids[this.state.startRow][this.state.startCol],
-      this.state.grids[this.state.endRow][this.state.endCol],
-      gridsInfo,
-    ];
-
     let [visitedGridsInOrder, shortestPathGrids] = [null, null];
     switch (this.state.chosenAlgo) {
       case "djikstra":
-        [visitedGridsInOrder, shortestPathGrids] = djikstra(...algoArguments);
+        [visitedGridsInOrder, shortestPathGrids] = djikstra(this.state.grids);
         break;
       case "bfs":
-        [visitedGridsInOrder, shortestPathGrids] = bfs(...algoArguments);
+        [visitedGridsInOrder, shortestPathGrids] = bfs(this.state.grids);
         break;
       case "astar":
-        [visitedGridsInOrder, shortestPathGrids] = astar(...algoArguments);
+        [visitedGridsInOrder, shortestPathGrids] = astar(this.state.grids);
         break;
       case "greedyBestFirst":
-        [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(...algoArguments);
+        [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(
+          this.state.grids
+        );
         break;
     }
 
