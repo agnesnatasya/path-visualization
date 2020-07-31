@@ -24,6 +24,7 @@ export default class Grids extends Component {
       buttonDragged: null,
       chosenAlgo: "bfs",
       buttonsEnabled: true,
+      pureGrid: true,
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -31,6 +32,11 @@ export default class Grids extends Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.visualizeAlgo = this.visualizeAlgo.bind(this);
     this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
+    this.toggleButtonsEnabled = this.toggleButtonsEnabled.bind(this);
+    this.toggleStartEndPosition = this.toggleStartEndPosition.bind(this);
+    this.toggleWallGrid = this.toggleWallGrid.bind(this);
+    this.checkIfStartOrEnd = this.checkIfStartOrEnd.bind(this);
+    this.visualizeShortestPath = this.visualizeShortestPath.bind(this);
   }
 
   componentDidMount() {
@@ -106,6 +112,9 @@ export default class Grids extends Component {
   }
 
   toggleStartEndPosition(row, col) {
+    if (!this.state.pureGrid) {
+      this.resetColor();
+    }
     this.setState(prevState => {
       const newGrids = prevState.grids.slice();
       const oldGrid = newGrids[row][col];
@@ -164,7 +173,6 @@ export default class Grids extends Component {
     this.setState(prevState => {
       const newGrids = prevState.grids.slice();
       newGrids[newGrid.row][newGrid.col] = newGrid;
-      console.log(newGrid)
       return {
         grids: newGrids
       }
@@ -179,38 +187,50 @@ export default class Grids extends Component {
     }
   }
 
+  resetColor() {
+    for (let row = 0; row < this.state.rowSize; row++) {
+      for (let col = 0; col < this.state.colSize; col++) {
+        if ((row === this.state.startRow && col === this.state.startCol) || (row === this.state.endRow && col === this.state.endCol)) continue;
+        const item = this.state.grids[row][col];
+        document.getElementById(`grid-${item.row}-${item.col}`).className = "grid";
+      }
+    }
+  }
+
   visualizeAlgo() {
+    if (!this.state.pureGrid) {
+      this.resetColor();
+    }
+    this.setState({pureGrid: false})
     this.toggleButtonsEnabled();
-    console.log(this.state.buttonsEnabled)
+
+    const gridsInfo = {
+      rowSize: this.state.rowSize,
+      colSize: this.state.colSize,
+      startRow: this.state.startRow,
+      startCol: this.state.startCol,
+      endRow: this.state.endRow,
+      endCol: this.state.endCol,
+    };
+    const algoArguments = [
+      this.state.grids[this.state.startRow][this.state.startCol],
+      this.state.grids[this.state.endRow][this.state.endCol],
+      gridsInfo,
+    ];
+
     let [visitedGridsInOrder, shortestPathGrids] = [null, null];
     switch (this.state.chosenAlgo) {
       case "djikstra":
-        [visitedGridsInOrder, shortestPathGrids] = djikstra(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids
-        );
+        [visitedGridsInOrder, shortestPathGrids] = djikstra(...algoArguments);
         break;
       case "bfs":
-        [visitedGridsInOrder, shortestPathGrids] = bfs(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids
-        );
+        [visitedGridsInOrder, shortestPathGrids] = bfs(...algoArguments);
         break;
       case "astar":
-        [visitedGridsInOrder, shortestPathGrids] = astar(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids
-        );
+        [visitedGridsInOrder, shortestPathGrids] = astar(...algoArguments);
         break;
       case "greedyBestFirst":
-        [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(
-          this.state.grids[this.state.startRow][this.state.startCol],
-          this.state.grids[this.state.endRow][this.state.endCol],
-          this.state.grids
-        );
+        [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(...algoArguments);
         break;
     }
 
@@ -218,20 +238,18 @@ export default class Grids extends Component {
       if (index === visitedGridsInOrder.length -1 ) {
         setTimeout(() => {
           this.visualizeShortestPath(shortestPathGrids);
-        }, 15 * visitedGridsInOrder.length);
+        }, 20 * visitedGridsInOrder.length);
       }
       setTimeout(() => {
-        document.getElementById(
-          `grid-${item.row}-${item.col}`
-        ).className = "grid grid-visited";
+        document.getElementById(`grid-${item.row}-${item.col}`).className =
+          "grid grid-visited";
         this.checkIfStartOrEnd(item);
-      }, 15 * index);
+      }, 20 * index);
     });
 
     setTimeout(() => {
       this.toggleButtonsEnabled();
-    }, ((10 * visitedGridsInOrder.length) + (15 * shortestPathGrids.length))
-    );
+    }, 20 * visitedGridsInOrder.length + 20 * shortestPathGrids.length + 50);
   }
 
   checkIfStartOrEnd(item) {
@@ -250,7 +268,7 @@ export default class Grids extends Component {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           "grid grid-shortest-path";
         this.checkIfStartOrEnd(item);
-      }, 15 * index);
+      }, 20 * index);
     });
   }
 
