@@ -7,6 +7,9 @@ export default class Grid extends Component {
     super(props);   
   }
 
+  /**
+   * Determine additional properties of the grid that will affect its background color.
+   */
   getAdditionalGridProps() {
     var { row, col, distance, isVisited, isWallGrid, isStartGrid, isEndGrid, previousGrid } = this.props;
     return isWallGrid ? 'grid-wall' : isStartGrid ? 'grid-start' : isEndGrid? 'grid-end': 'white'

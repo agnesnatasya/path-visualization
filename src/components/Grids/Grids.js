@@ -43,30 +43,9 @@ export default class Grids extends Component {
     this.setState({ grids: this.setInitialGrids() });
   }
 
-  initialGrid(row, col) {
-    return {
-      row: row,
-      col: col,
-      isVisited: false,
-      isWallGrid: false,
-      isStartGrid: this.isStartGrid(row, col),
-      isEndGrid: this.isEndGrid(row, col),
-      previousGrid: null,
-    };
-  }
-
-  setInitialGrids() {
-    let initialGrids = [];
-    for (let row = 0; row < this.state.rowSize; row++) {
-      let currentRow = [];
-      for (let col = 0; col < this.state.colSize; col++) {
-        currentRow.push(this.initialGrid(row, col));
-      }
-      initialGrids.push(currentRow);
-    }
-    return initialGrids;
-  }
-
+  /**
+   * Header element to choose algorithm and render 'visualize' button
+   */
   header = () => {
     return (
       <Container>
@@ -93,14 +72,61 @@ export default class Grids extends Component {
     );
   }
 
+  /**
+   * Return object of the grid at this row and column number
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
+  initialGrid(row, col) {
+    return {
+      row: row,
+      col: col,
+      isVisited: false,
+      isWallGrid: false,
+      isStartGrid: this.isStartGrid(row, col),
+      isEndGrid: this.isEndGrid(row, col),
+      previousGrid: null,
+    };
+  }
+
+  /**
+   * Set up initial grids state
+   */
+  setInitialGrids() {
+    let initialGrids = [];
+    for (let row = 0; row < this.state.rowSize; row++) {
+      let currentRow = [];
+      for (let col = 0; col < this.state.colSize; col++) {
+        currentRow.push(this.initialGrid(row, col));
+      }
+      initialGrids.push(currentRow);
+    }
+    return initialGrids;
+  }
+
+  /**
+   * Determine whether the grid at this row and col is a start grid
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   isStartGrid(row, col) {
     return (row === this.state.startRow) && (col === this.state.startCol);
   }
 
+  /**
+   * Determine whether the grid at this row and col is an end grid
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   isEndGrid(row, col) {
     return (row === this.state.endRow) && (col === this.state.endCol)
   }
 
+  /**
+   * Toggle a grid between a wall and non-wall grid
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   toggleWallGrid(row, col) {
     this.setState(prevState => {
       const newGrids = prevState.grids.slice();
@@ -111,6 +137,11 @@ export default class Grids extends Component {
     })
   }
 
+  /**
+   * Change position of start or end grid to the specified row and column
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   toggleStartEndPosition(row, col) {
     if (!this.state.pureGrid) {
       this.resetColor();
@@ -130,6 +161,13 @@ export default class Grids extends Component {
     });
   }
 
+  /**
+   * Handle MouseDown event at that row and column
+   * If it is a start or end grid, set mousePressed property to true, so it can be dragged later
+   * If it is a normal or wall grid, toggle wall grids
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   handleMouseDown(row, col) {
     if (this.state.buttonsEnabled) {
       if (this.isStartGrid(row, col)) {
@@ -142,6 +180,14 @@ export default class Grids extends Component {
     }
   }
 
+  /**
+   * Handle MouseEnter event at that row and column
+   * If currently the button is dragging a start or end grid,
+   * set the start or end grid position to the current position
+   * If it is pressing position on normal or wall grids, toggle wall grid property. 
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   handleMouseEnter(row, col) {
     if (this.state.buttonsEnabled) {
       if (this.state.buttonDragged) {
@@ -155,6 +201,12 @@ export default class Grids extends Component {
     }
   }
 
+  /**
+   * Handle MouseLeave event at this row and column
+   * If it just leaves a start or end grid, set the previous one to normal grid
+   * @param {*} row The row number of the grid
+   * @param {*} col The col number of the grid
+   */
   handleMouseLeave(row, col) {
     if (this.state.buttonsEnabled) {
       if (this.state.buttonDragged) {
@@ -163,22 +215,18 @@ export default class Grids extends Component {
     }
   }
 
-  handleMouseUp(row, col) {
+  /**
+   * Handle MouseUp event
+   */
+  handleMouseUp() {
     if (this.state.buttonsEnabled) {
       this.setState({ mousePressed: false, buttonDragged: null });
     }
   }
 
-  updateVisitedGrid(newGrid) {
-    this.setState(prevState => {
-      const newGrids = prevState.grids.slice();
-      newGrids[newGrid.row][newGrid.col] = newGrid;
-      return {
-        grids: newGrids
-      }
-    })
-  }
-
+  /**
+   * Toggle buttonsEnabled state
+   */
   toggleButtonsEnabled() {
     if (this.state.buttonsEnabled) {
       this.setState({ buttonsEnabled: false });
@@ -187,6 +235,9 @@ export default class Grids extends Component {
     }
   }
 
+  /**
+   * Reset color of all grids to background color
+   */
   resetColor() {
     for (let row = 0; row < this.state.rowSize; row++) {
       for (let col = 0; col < this.state.colSize; col++) {
@@ -197,6 +248,9 @@ export default class Grids extends Component {
     }
   }
 
+  /**
+   * Algo visualization trigger
+   */
   visualizeAlgo() {
     if (!this.state.pureGrid) {
       this.resetColor();
@@ -225,13 +279,13 @@ export default class Grids extends Component {
     visitedGridsInOrder.map((item, index) => {
       if (index === visitedGridsInOrder.length -1 ) {
         setTimeout(() => {
-          this.visualizeShortestPath(shortestPathGrids);
+      (shortestPathGrids);
         }, 20 * visitedGridsInOrder.length);
       }
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           "grid grid-visited";
-        this.checkIfStartOrEndGrid(item);
+        this.setStartEndGridClassName(item);
       }, 20 * index);
     });
 
@@ -240,7 +294,11 @@ export default class Grids extends Component {
     }, 20 * visitedGridsInOrder.length + 20 * shortestPathGrids.length + 50);
   }
 
-  checkIfStartOrEndGrid(item) {
+  /**
+   * Set class name to grid-start or grid-end if it is a start or end grid
+   * @param {*} item The grid item
+   */
+  setStartEndGridClassName(item) {
     if (this.isStartGrid(item.row, item.col)) {
       document.getElementById(`grid-${item.row}-${item.col}`).className =
         "grid grid-start";
@@ -250,12 +308,16 @@ export default class Grids extends Component {
     }
   }
   
-  visualizeShortestPath(shortestPathGrids) {
+  /**
+   * Function to visualize the path
+   * @param {*} shortestPathGrids The grid array that consttitutest the path
+   */
+  visualizePath(shortestPathGrids) {
     shortestPathGrids.map((item, index) => {
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
           "grid grid-shortest-path";
-        this.checkIfStartOrEndGrid(item);
+        this.setStartEndGridClassName(item);
       }, 20 * index);
     });
   }
