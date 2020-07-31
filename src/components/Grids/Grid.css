@@ -12,11 +12,11 @@
 }
 
 .grid-start {
-  background-color: #f58b54;
+  background-color: yellow !important;
 }
 
 .grid-end {
-  background-color: #fdba9a;
+  background-color: #f58b54 !important;
 }
 
 .grid-wall {
@@ -82,6 +82,5 @@
   100% {
     transform: scale(1);
     background-color: #f9b384;
-    border-color: #f9b384;
   }
 }
