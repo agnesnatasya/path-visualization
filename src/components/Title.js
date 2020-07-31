@@ -4,7 +4,7 @@ import "./Title.css";
 export function Title() {
   return (
     <div className="header-bar">
-      <span className="title">Path Visualizer</span>
+      <span className="title">Path Visualization</span>
     </div>
   );
 }
