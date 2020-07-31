@@ -36,24 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.dropdown-menu{
-  background-color: #fef4e8 !important;
-  border-color: #bf9b6d !important;
-}
-
-.btn {
-  color: rgba(0,0,0,.5) !important;
-  border-color: #bf9b6d !important;
-  margin-top: 1rem;
-  color: black !important;
-}
-
-.btn:hover {
-  background-color: #f2e0cb !important;
-}
-
-button:disabled,
-button[disabled]{
-  cursor:not-allowed !important;
-}
