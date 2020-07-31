@@ -4,8 +4,7 @@ import { astar } from '../../algorithms/AStar.js'
 import { greedyBestFirst } from '../../algorithms/GreedyBestFirst.js'
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
-import { dfs } from '../../algorithms/DFS.js'
-import { Row, Col, Button, Badge, Container } from 'react-bootstrap'
+import { Row, Button, Container } from 'react-bootstrap'
 
 import './Grids.css';
 
@@ -37,6 +36,7 @@ export default class Grids extends Component {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.visualizeAlgo = this.visualizeAlgo.bind(this);
   }
 
   componentDidMount() {
@@ -49,7 +49,6 @@ export default class Grids extends Component {
   header = () => {
     return (
       <Container>
-        <Row>
           <label htmlFor="module-credit">Algorithm</label>
           <select
             className="form-control"
@@ -62,10 +61,12 @@ export default class Grids extends Component {
               </option>
             ))}
           </select>
-        </Row>
         <Row>
-          <Button onClick={this.visualizeAlgo} disabled={!this.state.buttonsEnabled}>
-          Visualize!
+          <Button
+            onClick={this.visualizeAlgo}
+            disabled={!this.state.buttonsEnabled}
+          >
+            Visualize!
           </Button>
         </Row>
       </Container>
@@ -243,6 +244,7 @@ export default class Grids extends Component {
       for (let col = 0; col < this.state.colSize; col++) {
         if ((row === this.state.startRow && col === this.state.startCol) || (row === this.state.endRow && col === this.state.endCol)) continue;
         const item = this.state.grids[row][col];
+        if (item.isWallGrid) continue;
         document.getElementById(`grid-${item.row}-${item.col}`).className = "grid";
       }
     }
@@ -278,8 +280,7 @@ export default class Grids extends Component {
 
     visitedGridsInOrder.map((item, index) => {
       if (index === visitedGridsInOrder.length -1 ) {
-        setTimeout(() => {
-      (shortestPathGrids);
+        setTimeout(() => { this.visualizePath(shortestPathGrids);
         }, 20 * visitedGridsInOrder.length);
       }
       setTimeout(() => {

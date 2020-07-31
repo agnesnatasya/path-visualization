@@ -11,6 +11,9 @@ table {
   border-color: #bf9b6d !important;
   margin-top: 1rem;
   color: black !important;
+  background-color: #fef4e8 !important;
+  margin: auto;
+  margin-top: 1rem;
 }
 
 .btn:hover {
@@ -26,6 +29,7 @@ label {
   font-size: 75%;
   font-weight: 700;
   margin-bottom: 0 !important;
+  display: block;
 }
 
 .form-control {
@@ -35,4 +39,8 @@ label {
   text-align: center ;
   background-color: #fef4e8 !important;
   border-color: #bf9b6d !important;
+}
+
+.row {
+  display: block;
 }
