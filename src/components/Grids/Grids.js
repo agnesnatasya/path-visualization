@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
+import { astar } from '../../algorithms/AStar.js'
+import { greedyBestFirst } from '../../algorithms/GreedyBestFirstSearch.js'
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
 import { dfs } from '../../algorithms/DFS.js'
@@ -20,7 +22,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "astar",
+      chosenAlgo: "bfs",
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -28,10 +30,10 @@ export default class Grids extends Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.visualizeAlgo = this.visualizeAlgo.bind(this);
     this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
+    this.buttonsEnabled = true;
   }
 
   componentDidMount() {
-    console.log(this.setInitialGrids());
     this.setState({ grids: this.setInitialGrids() });
   }
 
@@ -116,8 +118,8 @@ export default class Grids extends Component {
   }
 
   handleMouseDown(row, col) {
-    if (this.isStartGrid(row,col)) {
-      this.setState({buttonDragged: 'start', mousePressed: true });
+    if (this.isStartGrid(row, col)) {
+      this.setState({ buttonDragged: 'start', mousePressed: true });
     } else if (this.isEndGrid(row, col)) {
       this.setState({ buttonDragged: 'end', mousePressed: true });
     } else {
@@ -157,7 +159,16 @@ export default class Grids extends Component {
     })
   }
 
+  toggleButtonsEnabled() {
+    if (this.state.buttonsEnabled) {
+      this.setState({ buttonsEnabled: false });
+    } else {
+      this.setState({ buttonsEnabled: true });
+    }
+  }
+
   visualizeAlgo() {
+    this.toggleButtonsEnabled();
     let [visitedGridsInOrder, shortestPath] = [null, null];
     switch (this.state.chosenAlgo) {
       case "djikstra":
@@ -174,39 +185,57 @@ export default class Grids extends Component {
           this.state.grids
         );
         break;
-      case "dfs":
-        [visitedGridsInOrder, shortestPath] = dfs(
+      case "astar":
+        [visitedGridsInOrder, shortestPath] = astar(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
         break;
-      
+      case "greedyBestFirst":
+        [visitedGridsInOrder, shortestPath] = greedyBestFirst(
+          this.state.grids[this.state.startRow][this.state.startCol],
+          this.state.grids[this.state.endRow][this.state.endCol],
+          this.state.grids
+        );
+        break;
     }
     visitedGridsInOrder.map((item, index) => {
+      if (index === visitedGridsInOrder.length -1 ) {
+        setTimeout(() => {
+          this.visualizeShortestPath(shortestPath);
+        }, 5 * visitedGridsInOrder.length);
+      }
       setTimeout(() => {
-        document.getElementById(`grid-${item.row}-${item.col}`).className =
-          'grid grid-visited';
-      }, 3000 * index);
+        document.getElementById(
+          `grid-${item.row}-${item.col}`
+        ).className = "grid grid-visited";
+        this.checkIfStartOrEnd(item);
+      }, 5 * index);
     });
-    if (shortestPath) {
-      setTimeout(() => {
-        this.visualizeShortestPath(shortestPath);
-      }, 3000 * visitedGridsInOrder.length
-      );
-    }
-
-
   }
 
-  visualizeShortestPath(nodesInShortestPathOrder) {
-    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
-      setTimeout(() => {
-        const node = nodesInShortestPathOrder[i];
-        document.getElementById(`grid-${node.row}-${node.col}`).className =
-          'grid grid-shortest-path';
-      }, 50 * i);
+  checkIfStartOrEnd(item) {
+    if (this.isStartGrid(item.row, item.col)) {
+      document.getElementById(`grid-${item.row}-${item.col}`).className =
+        "grid grid-start";
+    } else if (this.isEndGrid(item.row, item.col)) {
+      document.getElementById(`grid-${item.row}-${item.col}`).className =
+        "grid grid-end";
     }
+  }
+  
+  visualizeShortestPath(nodesInShortestPathOrder) {
+    nodesInShortestPathOrder.map((item, index) => {
+      if (index === nodesInShortestPathOrder.length - 1) {
+        this.toggleButtonsEnabled();
+      }
+      setTimeout(() => {
+        document.getElementById(`grid-${item.row}-${item.col}`).className =
+          'grid grid-shortest-path';
+        this.checkIfStartOrEnd(item);
+      }, 15 * index);
+    });
   }
 
 
