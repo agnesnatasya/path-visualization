@@ -1,6 +1,38 @@
+function initializeGrids(allGrids) {
+  let initialGrids = [];
+  let startGrid = null;
+  let endGrid = null;
+  for (let row = 0; row < allGrids.length; row++) {
+    let currentRow = [];
+    for (let col = 0; col < allGrids[0].length; col++) {
+      const originalGrid = allGrids[row][col];
+      const modifiedGrid = initialGrid(originalGrid);
+      currentRow.push(modifiedGrid);
+      if (originalGrid.isStartGrid) startGrid = modifiedGrid;
+      if (originalGrid.isEndGrid) endGrid = modifiedGrid;
+    }
+    initialGrids.push(currentRow);
+  }
+  return [startGrid, endGrid, initialGrids];
+}
+
+function initialGrid(originalGrid) {
+  var { row, col, isVisited, isWallGrid, previousGrid } = originalGrid;
+  return {
+    row: row,
+    col: col,
+    isVisited: isVisited,
+    isWallGrid: isWallGrid,
+    previousGrid: previousGrid,
+  };
+}
+
+export function dfs(allGrids) {
+  return dfsImplementation(...initializeGrids(allGrids));
+}
 
 
-export function dfs(currentGrid, endGrid, allGrids, visitedGridsInOrder = []) {
+function dfsImplementation(currentGrid, endGrid, allGrids, visitedGridsInOrder = []) {
   visitedGridsInOrder.push(currentGrid);
   currentGrid.isVisited = true;
   if (currentGrid.row === endGrid.row && currentGrid.col === endGrid.col) {
@@ -11,11 +43,8 @@ export function dfs(currentGrid, endGrid, allGrids, visitedGridsInOrder = []) {
   for (var i = 0; i < neighbors.length; i++) {
     neighbors[i].previousGrid = currentGrid;
     if (neighbors[i].row === endGrid.row && neighbors[i].col === endGrid.col) {
-      console.log("A");
       return [visitedGridsInOrder, getShortestPath(endGrid)];
     }
-    console.log(currentGrid.row, currentGrid.col);
-    console.log(neighbors[i].row, neighbors[i].col);
 
     dfs(neighbors[i], endGrid, allGrids, visitedGridsInOrder);
   }
