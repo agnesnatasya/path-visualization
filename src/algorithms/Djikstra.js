@@ -1,4 +1,39 @@
-export function djikstra(startGrid, endGrid, allGrids) {
+function initializeGrids(allGrids) {
+  let initialGrids = [];
+  let startGrid = null;
+  let endGrid = null;
+  for (let row = 0; row < allGrids.length; row++) {
+    let currentRow = [];
+    for (let col = 0; col < allGrids[0].length; col++) {
+      const originalGrid = allGrids[row][col];
+      const modifiedGrid = initialGrid(originalGrid);
+      currentRow.push(modifiedGrid);
+      if (originalGrid.isStartGrid) startGrid = modifiedGrid;
+      if (originalGrid.isEndGrid) endGrid = modifiedGrid;
+    }
+    initialGrids.push(currentRow);
+  }
+  return [startGrid, endGrid, initialGrids];
+}
+
+function initialGrid(originalGrid) {
+  var { row, col, isVisited, isWallGrid, previousGrid } = originalGrid;
+  return {
+    row,
+    col,
+    distance: Infinity,
+    isVisited: isVisited,
+    isWallGrid: isWallGrid,
+    previousGrid: previousGrid,
+  };
+}
+
+export function djikstra(allGrids) {
+  return djikstraImplementation(...initializeGrids(allGrids));
+}
+
+
+function djikstraImplementation(startGrid, endGrid, allGrids) {
   var totalGrids = allGrids.length * allGrids[0].length;
   var visitedGridsInOrder = [];
   var allNodes = getAllGrids(allGrids);
