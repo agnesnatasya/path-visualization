@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
 import { astar } from '../../algorithms/AStar.js'
-import { greedyBestFirst } from '../../algorithms/GreedyBestFirstSearch.js'
+import { greedyBestFirst } from '../../algorithms/GreedyBestFirst.js'
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
 import { dfs } from '../../algorithms/DFS.js'
-import { Navbar, Nav, NavDropdown, Button, Form } from 'react-bootstrap'
+import { Navbar, Row, Col, Button, Badge, Container } from 'react-bootstrap'
 
 import './Grids.css';
 
@@ -22,7 +22,7 @@ export default class Grids extends Component {
       grids: [],
       mousePressed: false,
       buttonDragged: null,
-      chosenAlgo: "astar",
+      algo: "A* Search",
       buttonsEnabled: true,
       pureGrid: true,
     };
@@ -47,7 +47,6 @@ export default class Grids extends Component {
     return {
       row: row,
       col: col,
-      distance: Infinity,
       isVisited: false,
       isWallGrid: false,
       isStartGrid: this.isStartGrid(row, col),
@@ -68,29 +67,64 @@ export default class Grids extends Component {
     return initialGrids;
   }
 
+  header = () => {
+    return (
+      <Container>
+        <Badge className="startGridBadge">
+          Drag the yellow grid to set start position
+        </Badge>
+        <Badge className="endGridBadge">
+          Drag the orange grid to set end position
+        </Badge>
+        <Badge className="wallGridBadge">
+          Drag over the board to draw wall grids
+        </Badge>
+        <br />
+        <Row>
+          <Col>
+            <label htmlFor="module-credit">Algorithm</label>
+            <select
+              id="module-credit"
+              className="form-control"
+              value={this.state.moduleCredit}
+              onChange={(e) => this.setState({ algo: e.target.value })}
+            >
+              {[
+                "A* Search",
+                "BFS",
+                "Djikstra's Algorithm",
+                "Greedy Best First Search",
+              ].map((item) => (
+                <option key={item} value={item} className="selectItems">
+                  {item}
+                </option>
+              ))}
+            </select>
+          </Col>
+        </Row>
+        <Row>
+
+          <Col>
+            <Button
+              variant="outline-primary"
+              onClick={this.visualizeAlgo}
+              disabled={!this.state.buttonsEnabled}
+            >
+              Visualize
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+
+
   headerBar = () => {
     return (
-      <Navbar className='header-bar' expand="lg">
+      <Navbar className="header-bar" expand="lg">
         <Navbar.Brand href="#home">Path Visualization</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <NavDropdown title="Algorithm" id="basic-nav-dropdown">
-              <NavDropdown.Item>Djikstra</NavDropdown.Item>
-              <NavDropdown.Item>BFS</NavDropdown.Item>
-              <NavDropdown.Item>DFS</NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-        <Form inline>
-          <Button
-            variant="outline-primary"
-            onClick={this.visualizeAlgo}
-            disabled={!this.state.buttonsEnabled}
-          >Visualize</Button>
-        </Form>
-      </Navbar >
-    )
+      </Navbar>
+    );
   }
 
   isStartGrid(row, col) {
@@ -205,17 +239,17 @@ export default class Grids extends Component {
     this.toggleButtonsEnabled();
 
     let [visitedGridsInOrder, shortestPathGrids] = [null, null];
-    switch (this.state.chosenAlgo) {
-      case "djikstra":
+    switch (this.state.algo) {
+      case "Djikstra's Algorithm":
         [visitedGridsInOrder, shortestPathGrids] = djikstra(this.state.grids);
         break;
-      case "bfs":
+      case "BFS":
         [visitedGridsInOrder, shortestPathGrids] = bfs(this.state.grids);
         break;
-      case "astar":
+      case "A* Search":
         [visitedGridsInOrder, shortestPathGrids] = astar(this.state.grids);
         break;
-      case "greedyBestFirst":
+      case "Greedy Best First Search":
         [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(
           this.state.grids
         );
@@ -265,6 +299,7 @@ export default class Grids extends Component {
     return (
       <div>
         {this.headerBar()}
+        {this.header()}
       <table>
         {
           this.state.grids.map((gridsRow, rowIndex) => {

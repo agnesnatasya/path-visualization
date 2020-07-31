@@ -2,6 +2,37 @@ table {
   margin: auto;
   border-collapse: collapse;
   padding: 10%;
-  margin-top: 3%;
+  margin-top: 1%;
   margin-bottom: 3%;
+}
+
+.startGridBadge {
+  background-color: yellow;
+  margin: 1rem;
+}
+
+.endGridBadge {
+  background-color: #df672c;
+  margin: 1rem;
+}
+
+.wallGridBadge {
+  background-color: #42240C;
+  color: white;
+  margin: 1rem;
+}
+
+label {
+  font-size: 75%;
+  font-weight: 700;
+  margin-bottom: 0 !important;
+}
+
+.form-control {
+  width: fit-content !important;
+  margin: auto;
+  font-size: 75% !important;
+  text-align: center ;
+  background-color: #fef4e8 !important;
+  border-color: #bf9b6d !important;
 }
