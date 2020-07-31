@@ -51,11 +51,11 @@ function djikstraImplementation(startGrid, endGrid, allGrids) {
     
     relaxDistance(currentGrid, allGrids);
     if (currentGrid === endGrid) {
-      var shortestPath = getShortestPath(endGrid);
+      shortestPath = getShortestPath(endGrid);
       return [visitedGridsInOrder, shortestPath];
     }
   }
-  var shortestPath = [];
+  shortestPath = [];
   return [visitedGridsInOrder, shortestPath];
 }
 
