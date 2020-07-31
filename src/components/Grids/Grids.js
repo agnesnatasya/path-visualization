@@ -23,6 +23,7 @@ export default class Grids extends Component {
       mousePressed: false,
       buttonDragged: null,
       chosenAlgo: "bfs",
+      buttonsEnabled: true,
     };
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -30,7 +31,6 @@ export default class Grids extends Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.visualizeAlgo = this.visualizeAlgo.bind(this);
     this.updateVisitedGrid = this.updateVisitedGrid.bind(this);
-    this.buttonsEnabled = true;
   }
 
   componentDidMount() {
@@ -64,7 +64,11 @@ export default class Grids extends Component {
           </Nav>
         </Navbar.Collapse>
         <Form inline>
-          <Button variant="outline-primary" onClick={this.visualizeAlgo}>Visualize</Button>
+          <Button
+            variant="outline-primary"
+            onClick={this.visualizeAlgo}
+            disabled={!this.state.buttonsEnabled}
+          >Visualize</Button>
         </Form>
       </Navbar >
     )
@@ -118,34 +122,42 @@ export default class Grids extends Component {
   }
 
   handleMouseDown(row, col) {
-    if (this.isStartGrid(row, col)) {
-      this.setState({ buttonDragged: 'start', mousePressed: true });
-    } else if (this.isEndGrid(row, col)) {
-      this.setState({ buttonDragged: 'end', mousePressed: true });
-    } else {
-      this.toggleWallGrid(row, col);
+    if (this.state.buttonsEnabled) {
+      if (this.isStartGrid(row, col)) {
+        this.setState({ buttonDragged: "start", mousePressed: true });
+      } else if (this.isEndGrid(row, col)) {
+        this.setState({ buttonDragged: "end", mousePressed: true });
+      } else {
+        this.toggleWallGrid(row, col);
+      }
     }
   }
 
   handleMouseEnter(row, col) {
-    if (this.state.buttonDragged) {
-      this.toggleStartEndPosition(row, col);
-    } else if (this.state.mousePressed) {
-      if (this.isStartGrid(row, col) || this.isEndGrid(row, col)) {
-        return;
+    if (this.state.buttonsEnabled) {
+      if (this.state.buttonDragged) {
+        this.toggleStartEndPosition(row, col);
+      } else if (this.state.mousePressed) {
+        if (this.isStartGrid(row, col) || this.isEndGrid(row, col)) {
+          return;
+        }
+        this.toggleWallGrid(row, col);
       }
-      this.toggleWallGrid(row, col);
     }
   }
 
   handleMouseLeave(row, col) {
-    if (this.state.buttonDragged) {
-      this.toggleStartEndPosition(row, col);
+    if (this.state.buttonsEnabled) {
+      if (this.state.buttonDragged) {
+        this.toggleStartEndPosition(row, col);
+      }
     }
   }
 
   handleMouseUp(row, col) {
-    this.setState({ mousePressed: false, buttonDragged: null })
+    if (this.state.buttonsEnabled) {
+      this.setState({ mousePressed: false, buttonDragged: null });
+    }
   }
 
   updateVisitedGrid(newGrid) {
@@ -169,50 +181,57 @@ export default class Grids extends Component {
 
   visualizeAlgo() {
     this.toggleButtonsEnabled();
-    let [visitedGridsInOrder, shortestPath] = [null, null];
+    console.log(this.state.buttonsEnabled)
+    let [visitedGridsInOrder, shortestPathGrids] = [null, null];
     switch (this.state.chosenAlgo) {
       case "djikstra":
-        [visitedGridsInOrder, shortestPath] = djikstra(
+        [visitedGridsInOrder, shortestPathGrids] = djikstra(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
         break;
       case "bfs":
-        [visitedGridsInOrder, shortestPath] = bfs(
+        [visitedGridsInOrder, shortestPathGrids] = bfs(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
         break;
       case "astar":
-        [visitedGridsInOrder, shortestPath] = astar(
+        [visitedGridsInOrder, shortestPathGrids] = astar(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
         break;
       case "greedyBestFirst":
-        [visitedGridsInOrder, shortestPath] = greedyBestFirst(
+        [visitedGridsInOrder, shortestPathGrids] = greedyBestFirst(
           this.state.grids[this.state.startRow][this.state.startCol],
           this.state.grids[this.state.endRow][this.state.endCol],
           this.state.grids
         );
         break;
     }
+
     visitedGridsInOrder.map((item, index) => {
       if (index === visitedGridsInOrder.length -1 ) {
         setTimeout(() => {
-          this.visualizeShortestPath(shortestPath);
-        }, 5 * visitedGridsInOrder.length);
+          this.visualizeShortestPath(shortestPathGrids);
+        }, 15 * visitedGridsInOrder.length);
       }
       setTimeout(() => {
         document.getElementById(
           `grid-${item.row}-${item.col}`
         ).className = "grid grid-visited";
         this.checkIfStartOrEnd(item);
-      }, 5 * index);
+      }, 15 * index);
     });
+
+    setTimeout(() => {
+      this.toggleButtonsEnabled();
+    }, ((10 * visitedGridsInOrder.length) + (15 * shortestPathGrids.length))
+    );
   }
 
   checkIfStartOrEnd(item) {
@@ -225,14 +244,11 @@ export default class Grids extends Component {
     }
   }
   
-  visualizeShortestPath(nodesInShortestPathOrder) {
-    nodesInShortestPathOrder.map((item, index) => {
-      if (index === nodesInShortestPathOrder.length - 1) {
-        this.toggleButtonsEnabled();
-      }
+  visualizeShortestPath(shortestPathGrids) {
+    shortestPathGrids.map((item, index) => {
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
-          'grid grid-shortest-path';
+          "grid grid-shortest-path";
         this.checkIfStartOrEnd(item);
       }, 15 * index);
     });
