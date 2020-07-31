@@ -32,7 +32,6 @@ function initialGrid(originalGrid) {
 }
 
 export function astar(allGrids) {
-  initializeGrids(allGrids);
   return astarImplementation(...initializeGrids(allGrids));
 }
 
