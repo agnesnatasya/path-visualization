@@ -1,0 +1,16 @@
+
+.startGridBadge {
+  background-color: yellow;
+  margin: 1rem;
+}
+
+.endGridBadge {
+  background-color: #df672c;
+  margin: 1rem;
+}
+
+.wallGridBadge {
+  background-color: #42240C;
+  color: white;
+  margin: 1rem;
+}
