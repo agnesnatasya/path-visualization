@@ -37,6 +37,11 @@
   }
 }
 
-.float {
-  float: right;
+.btn {
+  color: rgba(0,0,0,.5) !important;
+  border-color: #bf9b6d !important;
+}
+
+.btn:hover {
+  background-color: #f2e0cb !important;
 }
