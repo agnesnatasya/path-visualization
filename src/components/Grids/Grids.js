@@ -20,12 +20,12 @@ export default class Grids extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rowSize: 25,
-      colSize: 25,
-      startRow: 12,
-      startCol: 5,
-      endRow: 12,
-      endCol: 19,
+      rowSize: 17,
+      colSize: 50,
+      startRow: 8,
+      startCol: 12,
+      endRow: 8,
+      endCol: 38,
       grids: [],
       mousePressed: false,
       buttonDragged: null,
