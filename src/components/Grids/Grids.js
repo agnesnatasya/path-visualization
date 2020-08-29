@@ -5,6 +5,7 @@ import { greedyBestFirst } from '../../algorithms/GreedyBestFirst.js'
 import { djikstra } from '../../algorithms/Djikstra.js'
 import { bfs } from '../../algorithms/BFS.js'
 import { Row, Button, Container } from 'react-bootstrap'
+import { InfoBar } from "../InfoBar";
 
 import './Grids.css';
 
@@ -61,14 +62,12 @@ export default class Grids extends Component {
               </option>
             ))}
           </select>
-        <Row>
           <Button
             onClick={this.visualizeAlgo}
             disabled={!this.state.buttonsEnabled}
           >
             Visualize!
           </Button>
-        </Row>
       </Container>
     );
   }
@@ -327,6 +326,7 @@ export default class Grids extends Component {
     return (
       <div>
         {this.header()}
+        <InfoBar />
       <table>
         {
           this.state.grids.map((gridsRow, rowIndex) => {
