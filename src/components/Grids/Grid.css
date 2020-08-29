@@ -1,15 +1,12 @@
 
 
 .grid {
-  height: 28px;
-  width: 28px;
+  height: 27px;
+  width: 27px;
   line-height: 0;  
   border: 0.5px solid #bf9b6d;
 }
 
-.header-bar {
-  border-bottom: 0.1px solid #bf9b6d;
-}
 
 .grid-start {
   background-color: yellow !important;
