@@ -6,13 +6,13 @@ export function InfoBar() {
   return (
     <div class="info-bar">
       <Badge className="startGridBadge">
-        Drag yellow grid to set start position
+        Drag the yellow grid to set start position
       </Badge>
       <Badge className="endGridBadge">
-        Drag orange grid to set end position
+        Drag the orange grid to set end position
       </Badge>
       <Badge className="wallGridBadge">
-        Drag over board to draw wall grids
+        Drag over the board to draw wall grids
       </Badge>
     </div>
   );
