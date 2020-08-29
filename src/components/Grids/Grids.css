@@ -2,7 +2,6 @@ table {
   margin: auto;
   border-collapse: collapse;
   padding: 10%;
-  margin-top: 1%;
   margin-bottom: 3%;
 }
 
@@ -14,6 +13,8 @@ table {
   background-color: #fef4e8 !important;
   margin: auto;
   margin-top: 1rem;
+  font-size: 75% !important;
+  font-weight: 700 !important;
 }
 
 .btn:hover {
@@ -26,7 +27,7 @@ button[disabled]{
 }
 
 label {
-  font-size: 75%;
+  font-size:80%;
   font-weight: 700;
   margin-bottom: 0 !important;
   display: block;
@@ -39,8 +40,4 @@ label {
   text-align: center ;
   background-color: #fef4e8 !important;
   border-color: #bf9b6d !important;
-}
-
-.row {
-  display: block;
 }
