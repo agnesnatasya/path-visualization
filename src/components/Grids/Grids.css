@@ -6,19 +6,18 @@ table {
 }
 
 .btn {
-  color: rgba(0,0,0,.5) !important;
+  color: #00000080 !important;
   border-color: #bf9b6d !important;
   margin-top: 1rem;
   color: black !important;
-  background-color: #fef4e8 !important;
+  background-color: #dfc5a5 !important;
   margin: auto;
   margin-top: 1rem;
-  font-size: 75% !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 }
 
 .btn:hover {
-  background-color: #f2e0cb !important;
+  background-color: #bf9b6d !important;
 }
 
 button:disabled,
@@ -27,8 +26,8 @@ button[disabled]{
 }
 
 label {
-  font-size:80%;
-  font-weight: 700;
+  margin-top: 1%;
+  font-weight: 600;
   margin-bottom: 0 !important;
   display: block;
 }
