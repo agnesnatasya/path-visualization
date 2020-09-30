@@ -1,0 +1,11 @@
+h6 {
+  margin-top: 5% !important;
+  font-family: Lato;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  margin: 0;
+}
+
+pre {
+  display: inline !important;
+}

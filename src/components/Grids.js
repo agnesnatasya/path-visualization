@@ -49,7 +49,7 @@ export class Grids extends Component {
    */
   header = () => {
     return (
-      <Container>
+      <Container className="grids-header">
           <label htmlFor="module-credit">Algorithm</label>
           <select
             className="form-control"
