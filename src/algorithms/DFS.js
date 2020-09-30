@@ -31,22 +31,28 @@ export function dfs(allGrids) {
   return dfsImplementation(...initializeGrids(allGrids));
 }
 
+function dfsImplementation(startGrid, endGrid, allGrids) {
+  var visitedGridsInOrder = [];
+  var queue = [startGrid];
+  startGrid.distance = 0;
+  startGrid.isVisited = true;
+  while (queue.length !== 0) {
+    var currentGrid = queue.pop();
+    if (currentGrid.isWallGrid) continue;
+    visitedGridsInOrder.push(currentGrid);
+    var neighbors = getNeighborsOfGrid(currentGrid, allGrids);
+    neighbors.forEach(neighbor => {
+      if (neighbor === endGrid) {
+        endGrid.previousGrid = currentGrid;
+        return [visitedGridsInOrder, getShortestPath(endGrid)];
+      } else {
+        //visitedGridsInOrder.push(neighbor);
+        neighbor.previousGrid = currentGrid;
+        neighbor.isVisited = true;
+        queue.push(neighbor);
+      }
 
-function dfsImplementation(currentGrid, endGrid, allGrids, visitedGridsInOrder = []) {
-  visitedGridsInOrder.push(currentGrid);
-  currentGrid.isVisited = true;
-  if (currentGrid.row === endGrid.row && currentGrid.col === endGrid.col) {
-    return [visitedGridsInOrder, getShortestPath(endGrid)];
-  }
-  var neighbors = getNeighborsOfGrid(currentGrid, allGrids);
-
-  for (var i = 0; i < neighbors.length; i++) {
-    neighbors[i].previousGrid = currentGrid;
-    if (neighbors[i].row === endGrid.row && neighbors[i].col === endGrid.col) {
-      return [visitedGridsInOrder, getShortestPath(endGrid)];
-    }
-
-    dfs(neighbors[i], endGrid, allGrids, visitedGridsInOrder);
+    })
   }
   return [visitedGridsInOrder, getShortestPath(endGrid)];
 }
@@ -61,12 +67,29 @@ function getShortestPath(endGrid) {
   return shortestPath;
 }
 
+function updateNeighborsAndQueue(currentGrid, allGrids, queue) {
+  var neighbors = getNeighborsOfGrid(currentGrid, allGrids);
+  updateNeighborsProperties(neighbors, currentGrid, queue);
+  return neighbors;
+}
+
 function getNeighborsOfGrid(grid, allGrids) {
   var neighborDown = grid.row < allGrids.length - 1 ? allGrids[grid.row + 1][grid.col] : null;
   var neighborRight = grid.col < allGrids[0].length - 1 ? allGrids[grid.row][grid.col + 1] : null;
   var neighborLeft = grid.col > 0 ? allGrids[grid.row][grid.col - 1] : null;
   var neighborTop = grid.row > 0 ? allGrids[grid.row - 1][grid.col] : null;
-  return [neighborTop, neighborRight, neighborDown, neighborLeft].filter((neighbor) =>
-    neighbor !== null && (!neighbor.isVisited && !neighbor.isWallGrid)
+  return [neighborLeft, neighborDown, neighborRight, neighborTop].filter(
+    (neighbor) =>
+      neighbor !== null && !neighbor.isVisited && !neighbor.isWallGrid
   );
+}
+
+function updateNeighborsProperties(neighbors, currentGrid, queue) {
+  neighbors.map((neighbor) => {
+    if (neighbor !== null) {
+      neighbor.isVisited = true;
+      neighbor.previousGrid = currentGrid;
+      queue.push(neighbor);
+    }
+  })
 }
