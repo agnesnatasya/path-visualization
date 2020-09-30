@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Grid from './Grid';
-import { astar } from '../../algorithms/AStar.js'
-import { greedyBestFirst } from '../../algorithms/GreedyBestFirst.js'
-import { djikstra } from '../../algorithms/Djikstra.js'
-import { bfs } from '../../algorithms/BFS.js'
+import { astar } from '../algorithms/AStar.js'
+import { greedyBestFirst } from '../algorithms/GreedyBestFirst.js'
+import { djikstra } from '../algorithms/Djikstra.js'
+import { bfs } from '../algorithms/BFS.js'
 import { Row, Button, Container } from 'react-bootstrap'
-import { InfoBar } from "../InfoBar";
+import { InfoBar } from "./InfoBar";
 
 import './Grids.css';
 
@@ -16,7 +16,7 @@ const algoChoices = [
   "Greedy Best First Search",
 ]
 
-export default class Grids extends Component {
+export class Grids extends Component {
   constructor(props) {
     super(props);
     this.state = {
