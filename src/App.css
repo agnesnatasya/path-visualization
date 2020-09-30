@@ -36,3 +36,54 @@
     transform: rotate(360deg);
   }
 }
+
+.header-bar {
+  text-align: center;
+  justify-content: center;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  background-color: #f2e0cb;
+}
+
+.title {
+  font-family: Muli;
+  font-size: 16px !important;
+  letter-spacing: .2em;
+  font-weight: 400;
+  padding-top: 5%;
+  text-transform: uppercase;
+  margin: auto;
+}
+
+.nav-item {
+  flex-grow: 1;
+  flex: 1;
+  flex-basis: auto;
+  text-align: center;
+}
+
+a {
+  border: black 100px;
+  font-family: Muli;
+  font-size: 11px;
+  letter-spacing: .3em;
+  font-weight: 400;
+}
+
+.nav-link {
+  border: black 100px;
+  font-family: Muli;
+  font-size: 11px;
+  letter-spacing: .3em;
+  font-weight: 400;
+}
+
+.navbar-nav {
+  flex: 1;
+  border: 10px black;
+}
+
+.nav-link:hover{
+  transform: scale(1);
+  font-weight: bold;
+}

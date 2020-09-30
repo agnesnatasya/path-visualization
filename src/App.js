@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Theory } from "./components/Theory";
-import { Grids } from "./components/Regression";
-import { CodeForm } from './components/CodeForm';
+import { Grids } from "./components/Grids";
+import { Traversal } from './components/Traversal';
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 
@@ -29,7 +29,7 @@ export default function App() {
                                     <Nav.Link
                                         as={NavLink}
                                         exact
-                                        to="/"
+                                        to="/path-visualization"
                                         activeStyle={{
                                             fontWeight: "bold",
                                             color: "black",
@@ -44,7 +44,7 @@ export default function App() {
                                     <Nav.Link
                                         as={NavLink}
                                         exact
-                                        to="/theory"
+                                        to="/path-visualization/theory"
                                         activeStyle={{
                                             fontWeight: "bold",
                                             color: "black",
@@ -59,7 +59,7 @@ export default function App() {
                                     <Nav.Link
                                         as={NavLink}
                                         exact
-                                        to="/traversal"
+                                        to="/path-visualization/traversal"
                                         activeStyle={{
                                             fontWeight: "bold",
                                             color: "black",
@@ -76,14 +76,14 @@ export default function App() {
                 {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
                 <Switch>
-                    <Route path="/theory">
+                    <Route path="/path-visualization/theory">
                         <Theory />
                     </Route>
-                    <Route path="/regression">
+                    <Route path="/path-visualization/traversal">
                         <Traversal />
                     </Route>
-                    <Route path="/">
-                        <Graphs />
+                    <Route path="/path-visualization">
+                        <Grids />
                     </Route>
                 </Switch>
             </div>
