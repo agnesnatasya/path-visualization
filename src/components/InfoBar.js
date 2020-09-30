@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Container } from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 import "./InfoBar.css";
 
 export function InfoBar() {
@@ -13,6 +13,9 @@ export function InfoBar() {
       </Badge>
       <Badge className="wallGridBadge">
         Drag over the board to draw wall grids
+      </Badge>
+      <Badge className="exploredGridBadge">
+        Grids explored but not in the path to goal
       </Badge>
     </div>
   );

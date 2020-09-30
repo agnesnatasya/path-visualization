@@ -15,6 +15,12 @@
   margin: 0.5rem;
 }
 
+.exploredGridBadge {
+  background-color: #bf9b6d;
+  color: white;
+  margin: 0.5rem;
+}
+
 .info-bar {
   margin-top:0.5%;
   margin-bottom: 0.5%;
