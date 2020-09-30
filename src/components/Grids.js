@@ -280,7 +280,7 @@ export class Grids extends Component {
     visitedGridsInOrder.map((item, index) => {
       if (index === visitedGridsInOrder.length -1 ) {
         setTimeout(() => { this.visualizePath(shortestPathGrids);
-        }, 25 * visitedGridsInOrder.length);
+        }, 20 * visitedGridsInOrder.length);
       }
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =
