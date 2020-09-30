@@ -4,7 +4,7 @@ import { astar } from '../algorithms/AStar.js'
 import { greedyBestFirst } from '../algorithms/GreedyBestFirst.js'
 import { djikstra } from '../algorithms/Djikstra.js'
 import { bfs } from '../algorithms/BFS.js'
-import { Row, Button, Container } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 import { InfoBar } from "./InfoBar";
 
 import './Grids.css';
@@ -280,7 +280,7 @@ export class Grids extends Component {
     visitedGridsInOrder.map((item, index) => {
       if (index === visitedGridsInOrder.length -1 ) {
         setTimeout(() => { this.visualizePath(shortestPathGrids);
-        }, 20 * visitedGridsInOrder.length);
+        }, 25 * visitedGridsInOrder.length);
       }
       setTimeout(() => {
         document.getElementById(`grid-${item.row}-${item.col}`).className =

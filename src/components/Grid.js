@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import './Grid.css';
 
 export default class Grid extends Component {
-  constructor(props) {
-    super(props);   
-  }
 
   /**
    * Determine additional properties of the grid that will affect its background color.
