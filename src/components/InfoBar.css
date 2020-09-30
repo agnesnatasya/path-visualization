@@ -17,5 +17,8 @@
 
 .info-bar {
   margin-top:0.5%;
-  margin-bottom: 0.5%
+  margin-bottom: 0.5%;
+  margin: auto;
+  justify-content: center;
+  text-align: center;
 }
