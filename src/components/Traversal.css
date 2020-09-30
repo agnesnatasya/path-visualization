@@ -9,3 +9,8 @@ h6 {
 pre {
   display: inline !important;
 }
+
+.content {
+    padding-left: 17% !important;
+    padding-right: 17% !important
+}
