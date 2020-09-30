@@ -4,7 +4,7 @@ import "./InfoBar.css";
 
 export function InfoBar() {
   return (
-    <div class="info-bar">
+    <div className="info-bar">
       <Badge className="startGridBadge">
         Drag the yellow grid to set start position
       </Badge>

@@ -327,40 +327,46 @@ export class Grids extends Component {
       <div>
         {this.header()}
         <InfoBar />
-      <table>
-        {
-          this.state.grids.map((gridsRow, rowIndex) => {
+        <table>
+          <tbody>
+            {this.state.grids.map((gridsRow, rowIndex) => {
               return (
                 <tr key={rowIndex}>
                   {gridsRow.map((gridsCol, colIndex) => {
-                    var { row, col, distance, isVisited, isWallGrid, isStartGrid, isEndGrid, previousGrid} = gridsCol;
-                      return (
-                        <Grid
-                          key={col}
-                          row={row}
-                          col={col}
-                          distance={distance}
-                          isVisited={isVisited}
-                          isWallGrid={isWallGrid}
-                          isStartGrid={isStartGrid}
-                          isEndGrid={isEndGrid}
-                          previousGrid={previousGrid}
-                          onMouseDown={this.handleMouseDown}
-                          onMouseUp={this.handleMouseUp}
-                          onMouseEnter={this.handleMouseEnter}
-                          onMouseLeave={this.handleMouseLeave}
-                        />
-                      );
-                    }
-                  )
-                  }
+                    var {
+                      row,
+                      col,
+                      distance,
+                      isVisited,
+                      isWallGrid,
+                      isStartGrid,
+                      isEndGrid,
+                      previousGrid,
+                    } = gridsCol;
+                    return (
+                      <Grid
+                        key={col - row}
+                        row={row}
+                        col={col}
+                        distance={distance}
+                        isVisited={isVisited}
+                        isWallGrid={isWallGrid}
+                        isStartGrid={isStartGrid}
+                        isEndGrid={isEndGrid}
+                        previousGrid={previousGrid}
+                        onMouseDown={this.handleMouseDown}
+                        onMouseUp={this.handleMouseUp}
+                        onMouseEnter={this.handleMouseEnter}
+                        onMouseLeave={this.handleMouseLeave}
+                      />
+                    );
+                  })}
                 </tr>
-              )
-            }
-          )
-        }
+              );
+            })}
+          </tbody>
         </table>
       </div>
-    )
+    );
   }
 }
