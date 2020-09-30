@@ -25,49 +25,43 @@ export default function App() {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item active">
-                                <a className="nav-link">
-                                    <Nav.Link
-                                        as={NavLink}
-                                        exact
-                                        to="/path-visualization"
-                                        activeStyle={{
-                                            fontWeight: "bold",
-                                            color: "black",
-                                        }}
-                                    >
-                                        PATH VISUALIZER
-                                    </Nav.Link>
-                                </a>
+                                <Nav.Link
+                                    as={NavLink}
+                                    exact
+                                    to="/path-visualization"
+                                    activeStyle={{
+                                        fontWeight: "bold",
+                                        color: "black",
+                                    }}
+                                >
+                                    PATH VISUALIZER
+                                </Nav.Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link">
-                                    <Nav.Link
-                                        as={NavLink}
-                                        exact
-                                        to="/path-visualization/theory"
-                                        activeStyle={{
-                                            fontWeight: "bold",
-                                            color: "black",
-                                        }}
-                                    >
-                                        GRAPH TRAVERSAL THEORY
-                                    </Nav.Link>
-                                </a>
+                                <Nav.Link
+                                    as={NavLink}
+                                    exact
+                                    to="/path-visualization/theory"
+                                    activeStyle={{
+                                        fontWeight: "bold",
+                                        color: "black",
+                                    }}
+                                >
+                                    GRAPH TRAVERSAL THEORY
+                                </Nav.Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link">
-                                    <Nav.Link
-                                        as={NavLink}
-                                        exact
-                                        to="/path-visualization/traversal"
-                                        activeStyle={{
-                                            fontWeight: "bold",
-                                            color: "black",
-                                        }}
-                                    >
-                                        HOW THE VISUALIZER WORKS
-                                    </Nav.Link>
-                                </a>
+                                <Nav.Link
+                                    as={NavLink}
+                                    exact
+                                    to="/path-visualization/traversal"
+                                    activeStyle={{
+                                        fontWeight: "bold",
+                                        color: "black",
+                                    }}
+                                >
+                                    HOW THE VISUALIZER WORKS
+                                </Nav.Link>
                             </li>
                         </ul>
                     </div>

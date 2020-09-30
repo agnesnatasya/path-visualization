@@ -56,9 +56,7 @@
 }
 
 .nav-item {
-  flex-grow: 1;
-  flex: 1;
-  flex-basis: auto;
+  flex: 1 1 0;
   text-align: center;
 }
 
